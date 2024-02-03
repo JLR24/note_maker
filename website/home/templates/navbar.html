@@ -1,0 +1,13 @@
+<div class="navbar">
+    <ul class="nav_links">
+        <li><a href="/" {% if current_nav == "home" %} style="color: blue;" {% endif %}>Home</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="/create/" {% if current_nav == "create" %} style="color: blue;" {% endif %}>Create</a></li>
+            <li><a href="/revise/" {% if current_nav == "revise" %} style="color: blue;" {% endif %}>Revise</a></li>
+            <li><a href="/auth/logout">Logout</a></li>
+        {% else %}
+            <li><a href="/auth/login" {% if current_nav == "login" %} style="color: blue;" {% endif %}>Login</a></li>
+            <li><a href="/auth/signup" {% if current_nav == "signup" %} style="color: blue;" {% endif %}>Signup</a></li>
+        {% endif %}
+    </ul>
+</div>
