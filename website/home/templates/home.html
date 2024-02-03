@@ -1,1 +1,25 @@
 {% extends "base.html" %}
+
+{% block title %} Note Maker {% endblock %}
+
+{% block content %}
+
+    <h1>Note Maker</h1><br>
+
+    <p>
+        This site provides an intuitive way to consolidate class notes in preparation for revision. The techniques that are implemented here work well for me, but are obviously
+        unlikely to suit everyone. The site works by first allowing you to enter notes for different courses, modules, and headings. Each "point" can have "sub-points", allowing 
+        for nested concepts. When it comes to revising, you can choose to be presented with headings that you then have to fill out the relevant points under, or you can pre-define some
+        "fill-the-gap" notes to complete. Each attempt is tracked, so you can view how many times you have reviewed each point, heading, and module.
+    </p>
+    {% if user.is_authenticated %}
+        <p>
+            Want to get started? Click <a href="/create/">here to begin making your notes</a> or click <a href="/revise/">here to begin revising</a>!
+        </p>
+    {% else %}
+        <p>
+            Want to give it a try? Click <a href="/auth/signup">here to sign up</a> or if you already have an account, <a href="/auth/login">click here to log in</a>!
+        </p>
+    {% endif %}
+
+{% endblock %}
