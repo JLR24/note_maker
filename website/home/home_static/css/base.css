@@ -1,4 +1,6 @@
 .page {
     padding: 40px;
-    /* border: 1px solid black; */
+    border-left: 10px solid rgb(45, 45, 45);
+    border-right: 10px solid rgb(45, 45, 45);
+    height: 100vh;
 }
