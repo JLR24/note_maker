@@ -18,5 +18,3 @@ def current_nav():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-    ## NEED TO INITIALIE GIT
