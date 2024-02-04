@@ -2,5 +2,11 @@
     padding: 40px;
     border-left: 10px solid rgb(45, 45, 45);
     border-right: 10px solid rgb(45, 45, 45);
+    background-color: white;
     height: 100vh;
+}
+
+.input-group * {
+    /* Updates all input-group divs */
+    margin-left: 5px;
 }

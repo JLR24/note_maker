@@ -1,0 +1,12 @@
+.course_list {
+    border: 5px double black;
+    padding: 5px;
+}
+
+.course_list div {
+    border: 2px rgb(45, 45, 45) solid;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: cornsilk;
+    margin: 15px 0px;
+}

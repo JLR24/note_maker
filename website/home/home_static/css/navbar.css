@@ -27,3 +27,9 @@
     text-decoration: none;
     color: white;
 }
+
+.nbar img {
+    height: 0px;
+    height: 24px;
+    padding-right: 10px;
+}

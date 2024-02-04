@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %} Create {% endblock %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="{{ url_for('create.static', filename='create.css') }}">
+
+    <h1>Create</h1><br>
+
+    <h2>Add a New Course:</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Course Name</label>
+            <div class="input-group">
+                <input type="text" name="name" id="name" class="form-control" placeholder="Enter the course name..." required autofocus>
+                <input type="submit" value="Create" class="btn btn-outline-success">
+            </div>
+        </div>
+    </form>
+    <br><hr><br>
+    <h2>Your Courses:</h2>
+    <div class="course_list">
+        {% for course in user.getCourses() %}
+            <div>
+                <b><a href="/create/{{course.id}}" style="color: inherit">{{ course.name }}</a></b> ({{ course.getModules() | length }} modules) - {{ course.getAttempts() }} attempts.
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

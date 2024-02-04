@@ -1,5 +1,6 @@
 <div class="nbar">
     <ul class="nav_links">
+        <li><img src="{{ url_for('home.static', filename='icon.png') }}"></li>
         <li><a href="/" {% if current_nav == "home" %} style="text-decoration: underline;" {% endif %}>Home</a></li>
         {% if user.is_authenticated %}
             <li><a href="/create/" {% if current_nav == "create" %} style="text-decoration: underline;" {% endif %}>Create</a></li>
