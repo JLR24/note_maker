@@ -1,12 +1,11 @@
 .footer {
     width: 100%;
-    /* position: fixed;
-    bottom: 0;
-    left: 0; */
     padding: 15px 5vw;
     background-color: rgb(45, 45, 45);
     color: white;
     font-weight: bold;
+    /* Keeps logo in div */
+    overflow: hidden;
 }
 
 .footer li a {
@@ -18,11 +17,14 @@
     color: red;
 }
 
+.footer_links {
+    float: left;
+}
 
 .footer_logo {
-    position: absolute;
-    top: 30%;
-    right: 15%;
+    float: right;
     text-align: right;
     font-size: xx-large;
+    padding-right: 5%;
+    padding-top: 2%;
 }
