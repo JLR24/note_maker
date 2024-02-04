@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} Creation Tree for {{ course.name }} {% endblock %}
+
+{% block content %}
+
+    <h1>"{{ course.name }}" - Creation Tree:</h1><br>
+
+    <ul>
+    {% for module in course.getModules() %}
+        <li id="mod_{{module.id}}">{{ module.name }}</li>
+        <ul>
+            {% for heading in module.getHeadings() %}
+                <li id="head_{{heading.id}}">{{ heading.text }}</li>
+            {% endfor %}
+            <li><a href="/create/add_heading?m={{module.id}}">Add heading</a></li>
+        </ul>
+    {% endfor %}
+    <li><a href="/create/add_module">Add Module</a></li>
+    </ul>
+
+
+{% endblock %}

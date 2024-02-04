@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Add module for {{ course.name }} {% endblock %}
+
+{% block content %}
+
+    <h1>Add Module to Course "{{ course.name }}"</h1><br>
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Module Name</label>
+            <div class="input-group">
+                <input type="text" name="name" id="name" class="form-control" placeholder="Enter the module name..." required autofocus>
+                <input type="submit" value="Create" class="btn btn-outline-success">
+            </div>
+        </div>
+    </form>
+    <hr>
+    <h2>Existing Modules:</h2><br>
+    <ul>
+        {% for module in course.getModules() %}
+            <li>{{ module.name }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

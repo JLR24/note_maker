@@ -33,6 +33,14 @@ class Module(db.Model): # Example: CS126 -> Design of Information Structures
     course = db.Column(db.Integer, db.ForeignKey("course.id"))
     attempts = db.Column(db.Integer, default=0)
 
+    def getHeadings(self):
+        '''Returns a list of the modules's headings.'''
+        return Heading.query.filter_by(module=self.id).all()
+    
+    def getCourse(self):
+        '''Returns the Module's Course object.'''
+        return Course.query.filter_by(id=self.course).first()
+
 
 class Heading(db.Model): # Example: Sorting Algorithms
     id = db.Column(db.Integer, primary_key=True)

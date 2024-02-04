@@ -1,6 +1,6 @@
-from flask import Blueprint, request, flash, render_template, redirect, url_for
+from flask import Blueprint, request, flash, render_template, redirect, url_for, session
 from flask_login import current_user, login_required
-from ..models import db, Course
+from ..models import db, Course, Module, Heading
 
 create = Blueprint("create", __name__, template_folder="templates", static_folder="static")
 
@@ -17,6 +17,57 @@ def index():
         db.session.commit()
         flash("Course added.", category="success")
     return render_template("create.html", user=current_user)
+
+
+@create.route("/<int:id>")
+@login_required
+def tree(id):
+    '''This page displays the creation tree of the course referenced by the given id.'''
+    course = Course.query.filter_by(id=id, user=current_user.id).first()
+    if not course:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("home.index"))
+    session["course"] = id
+    return render_template("creation_tree.html", user=current_user, course=course)
+
+
+@create.route("/add_module", methods=["GET", "POST"])
+def add_module():
+    '''This page allows the user to add a module to the given course (in session).'''
+    course = Course.query.filter_by(id=session["course"], user=current_user.id).first()
+    if not course:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("home.index"))
+    if request.method == "POST":
+        module = Module(
+            name = request.form.get("name"),
+            course = course.id
+        )
+        db.session.add(module)
+        db.session.commit()
+        flash("Module added!", category="success")
+        return redirect(url_for("create.tree", _anchor=module.id, id=course.id))
+    return render_template("add_module.html", user=current_user, course=course)
+
+
+@create.route("/add_heading", methods=["GET", "POST"])
+def add_heading():
+    '''This page allows the user to add a heading to the given module.'''
+    module = Module.query.filter_by(id=request.args.get("m")).first()
+    if not module or module.getCourse().user != current_user.id:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("home.index"))
+    course = module.getCourse()
+    if request.method == "POST":
+        heading = Heading(
+            text = request.form.get("text"),
+            module = module.id
+        )
+        db.session.add(heading)
+        db.session.commit()
+        flash("Heading added!", category="success")
+        return redirect(url_for("create.tree", _anchor=heading.id, id=course.id))
+    return render_template("add_heading.html", user=current_user, course=course, module=module)
 
 
 # Create course

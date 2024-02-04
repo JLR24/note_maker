@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Add heading for {{ course.name }} {% endblock %}
+
+{% block content %}
+
+    <h1>Add Module to Course "{{ course.name }}" under Module "{{ module.name }}"</h1><br>
+    <form method="POST">
+        <div class="form-group">
+            <label for="text">Heading Text</label>
+            <div class="input-group">
+                <input type="text" name="text" id="text" class="form-control" placeholder="Enter the heading text..." required autofocus>
+                <input type="submit" value="Create" class="btn btn-outline-success">
+            </div>
+        </div>
+    </form>
+    <hr>
+    <h2>Existing Headings:</h2><br>
+    <ul>
+        {% for heading in module.getHeadings() %}
+            <li>{{ heading.text }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
