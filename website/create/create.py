@@ -1,6 +1,6 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for, session
 from flask_login import current_user, login_required
-from ..models import db, Course, Module, Heading
+from ..models import db, Course, Module, Heading, Point
 
 create = Blueprint("create", __name__, template_folder="templates", static_folder="static")
 
@@ -32,6 +32,7 @@ def tree(id):
 
 
 @create.route("/add_module", methods=["GET", "POST"])
+@login_required
 def add_module():
     '''This page allows the user to add a module to the given course (in session).'''
     course = Course.query.filter_by(id=session["course"], user=current_user.id).first()
@@ -51,6 +52,7 @@ def add_module():
 
 
 @create.route("/add_heading", methods=["GET", "POST"])
+@login_required
 def add_heading():
     '''This page allows the user to add a heading to the given module.'''
     module = Module.query.filter_by(id=request.args.get("m")).first()
@@ -68,6 +70,48 @@ def add_heading():
         flash("Heading added!", category="success")
         return redirect(url_for("create.tree", _anchor=heading.id, id=course.id))
     return render_template("add_heading.html", user=current_user, course=course, module=module)
+
+
+@create.route("/add_point", methods=["GET", "POST"])
+@login_required
+def add_point():
+    try:
+        parent_type = "point"
+        if request.args.get("heading"):
+            parent_type = "heading"
+            parent = Heading.query.filter_by(id=int(request.args.get(parent_type))).first()
+        else:
+            parent = Point.query.filter_by(id=int(request.args.get(parent_type))).first()
+        if not parent:
+            flash("Invalid details!", category="error")
+            return redirect(url_for("home.index"))
+        
+        course = parent.getCourse()
+        
+        if request.method == "POST":
+            blankFill = True
+            if request.form.get("blank_fill") == "No":
+                blankFill = False
+            isRoot = False
+            if parent_type == "heading":
+                isRoot = True
+            point = Point(
+                text = request.form.get("text"),
+                blankFill = blankFill,
+                hint = request.form.get("hint"),
+                parent = parent.id,
+                isRoot = isRoot
+            )
+            db.session.add(point)
+            db.session.commit()
+            flash("Point Added!", category="success")
+            return redirect(url_for("create.tree", _anchor=point.id, id=course.id))
+        
+        return render_template("add_point.html", user=current_user, parent=parent, parent_type=request.args, course=course)
+    except Exception as e: # request.args.get("") may not give back an int.
+        flash("Invalid details!", category="error")
+        print(e)
+        return redirect(url_for("home.index"))
 
 
 # Create course

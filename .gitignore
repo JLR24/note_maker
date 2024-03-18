@@ -6,3 +6,4 @@ env.py
 script.py.mako
 .DS_Store
 .env
+jinja_notes.txt

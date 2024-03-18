@@ -48,6 +48,18 @@ class Heading(db.Model): # Example: Sorting Algorithms
     module = db.Column(db.Integer, db.ForeignKey("module.id"))
     attempts = db.Column(db.Integer, default=0)
 
+    def getPoints(self):
+        '''Returns a list of the Heading's Point objects'''
+        return Point.query.filter_by(isRoot=True, parent=self.id).all()
+    
+    def getModule(self):
+        '''Returns the Heading's Module object.'''
+        return Module.query.filter_by(id=self.module).first()
+    
+    def getCourse(self):
+        '''Returns the Course object for the Heading.'''
+        return self.getModule().getCourse()
+
 
 class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)]
     id = db.Column(db.Integer, primary_key=True)
@@ -59,3 +71,18 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     successes = db.Column(db.Integer, default=0)
     failures = db.Column(db.Integer, default=0)
     last_answered = db.Column(db.DateTime(timezone=True))
+    
+    def getChildren(self):
+        '''Returns a list of Points of all children nodes for the Point.'''
+        return Point.query.filter_by(isRoot=False, parent=self.id).all()
+    
+    def getCourse(self):
+        '''Returns the Point's Course object'''
+        if self.isRoot:
+            heading = Heading.query.filter_by(id=self.parent).first()
+        else:
+            point = self
+            while point.isRoot == False:
+                point = Point.query.filter_by(id=point.parent).first()
+            heading = Heading.query.filter_by(id=point.parent).first()
+        return heading.getCourse()

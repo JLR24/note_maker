@@ -10,3 +10,16 @@
     background-color: cornsilk;
     margin: 15px 0px;
 }
+
+
+.tree-module {
+    text-decoration: underline;
+}
+
+.tree-heading {
+    padding-left: 20px;
+}
+
+.tree-points {
+    padding-left: 60px;
+}

@@ -6,18 +6,112 @@
 
     <h1>"{{ course.name }}" - Creation Tree:</h1><br>
 
-    <ul>
+    <!-- Recursion Source: https://jinja.palletsprojects.com/en/3.0.x/templates/#python-methods -->
+
+    <!-- <ul>
     {% for module in course.getModules() %}
         <li id="mod_{{module.id}}">{{ module.name }}</li>
         <ul>
             {% for heading in module.getHeadings() %}
                 <li id="head_{{heading.id}}">{{ heading.text }}</li>
+                <ul>
+                {% for parent_point in heading.getPoints() %}
+                    <li id="parent_point_{{parent_point.id}}">{{parent_point.text}}</li>
+                    {%- for item in parent_point.getChildren() recursive %}
+                        <ul>
+                        <li>{{item.text}}</li>
+                        {%- if item.getChildren() -%}
+                            {{ loop(item.getChildren()) }}
+                        {%- else %}
+                            <ul><li><a href="/create/add_point?point={{item.id}}">Add Point</a></li></ul>
+                        {%- endif %}</li>
+                        </ul> -->
+                        <!-- <ul><li><a href="/create/add_point?point={{item.id}}">Add Point</a></li></ul> -->
+                    <!-- {%- endfor %}
+                    <li><a href="/create/add_point?point={{parent_point.id}}">Add Point</a></li>
+                {% endfor %}
+                <li><a href="/create/add_point?heading={{heading.id}}">Add Point</a></li>
+                </ul>
             {% endfor %}
             <li><a href="/create/add_heading?m={{module.id}}">Add heading</a></li>
         </ul>
     {% endfor %}
     <li><a href="/create/add_module">Add Module</a></li>
-    </ul>
+    </ul> -->
 
+    <!-- {% for module in course.getModules() %}
+
+        <h2 class="tree-module">{{ module.name }}</h2>
+
+        {% for heading in module.getHeadings() %}
+
+            <h3 class="tree-heading">{{ heading.text }}</h3>
+            
+            <ul class="tree-points">
+                {% for node in heading.getPoints() %}
+
+                    <li>{{ node.text }}</li>
+
+                    <ul>
+                        {%- for point in node.getChildren() recursive %}
+
+                            <li>{{ point.text }}</li>
+
+                        {% endfor %}
+                    </ul>
+
+                {% endfor %}
+            </ul>
+
+        {% endfor %}
+
+    {% endfor %} -->
+
+
+    {% for module in course.getModules() %}
+
+        <h2 class="tree-module">{{ module.name }}:</h2>
+
+        {% for heading in module.getHeadings() %}
+
+            <h3 class="tree-heading">{{ heading.text }}:</h3>
+            
+            <ul class="tree-points">
+
+                {% for node in heading.getPoints() %}
+
+                    <li>{{ node.text }}</li>
+
+                    {%- for item in node.getChildren() recursive %}
+                        <ul>
+                            <li>{{ item.text }}</li>
+                            {%- if item.getChildren() -%}
+
+                                {{ loop(item.getChildren()) }}
+
+                            {%- else %}
+
+                                <ul>
+                                    <li><a href="/create/add_point?point={{item.id}}">Add Point</a></li>
+                                </ul>
+
+                            {%- endif %}</li>
+                            </ul> 
+                        <ul>
+                            <li><a href="/create/add_point?point={{item.id}}">Add Point</a></li></ul>
+                    {%- endfor %}
+
+                {% endfor %}
+                <li><a href="/create/add_point?heading={{ heading.id }}">Add Point</a></li>
+                
+            </ul>
+
+        {% endfor %}
+
+        <h3 class="tree-heading"><a href="/create/add_heading?m={{ module.id }}">Add Heading</a></h3>
+    
+        <br><hr><br>
+    {% endfor %}
+    <h2 class="tree-module"><a href="/create/add_module">Add Module</a></h2>
 
 {% endblock %}

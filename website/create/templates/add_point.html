@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Add Point {% endblock %}
+
+{% block content %}
+
+    <h1>Add Point under: "{{parent.text}}"</h1>
+    <small class="text-muted">Course: "<i>{{course.name}}</i>"</small><br><br>
+    <form method="POST">
+        <div class="form-group">
+            <label for="text">Point Text</label>
+            <textarea name="text" id="text" class="form-control" placeholder="Enter the text..." required autofocus></textarea>
+        </div>
+       
+        <div class="form-group" style="padding: 0px 15px;">
+            <label style="padding-right: 15px;">Does this text have support for blank-fill? </label>
+            <input type="radio" name="blank_fill" value="Yes" checked>
+            <label for="blank_fill" style="padding-right: 15px;">Yes</label>
+            <input type="radio" name="blank_fill" value="No">
+            <label for="blank_fill" style="padding-right: 15px;">No</label>
+        </div>
+
+        <div class="form-group">
+            <label for="text">Hint</label>
+            <input type="text" name="hint" id="hint" class="form-control" placeholder="Enter an optional hint...">
+        </div>
+        <input type="submit" value="Create" class="btn btn-outline-success">
+    </form>
+
+{% endblock %}
