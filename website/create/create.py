@@ -23,12 +23,14 @@ def index():
 @login_required
 def tree(id):
     '''This page displays the creation tree of the course referenced by the given id.'''
+    # db.session.delete(Point.query.get(4))
+    # db.session.commit()
     course = Course.query.filter_by(id=id, user=current_user.id).first()
     if not course:
         flash("Invalid details!", category="error")
         return redirect(url_for("home.index"))
     session["course"] = id
-    return render_template("creation_tree.html", user=current_user, course=course)
+    return render_template("tree.html", user=current_user, course=course)
 
 
 @create.route("/add_module", methods=["GET", "POST"])
@@ -92,6 +94,9 @@ def add_point():
             blankFill = True
             if request.form.get("blank_fill") == "No":
                 blankFill = False
+            numeric = True
+            if request.form.get("numeric") == "No":
+                numeric = False
             isRoot = False
             if parent_type == "heading":
                 isRoot = True
@@ -100,7 +105,8 @@ def add_point():
                 blankFill = blankFill,
                 hint = request.form.get("hint"),
                 parent = parent.id,
-                isRoot = isRoot
+                isRoot = isRoot,
+                numeric = numeric
             )
             db.session.add(point)
             db.session.commit()

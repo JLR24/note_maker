@@ -1,0 +1,78 @@
+<div class="tree-form-div" id="form_div" style="display: none;">
+    <h4 id="form_header">PENDING</h4>
+    <form method="POST" class="tree-form">
+        <input type="hidden" id="form_id" name="id">
+        <input type="hidden" id="form_title" name="title">
+        <input type="hidden" id="form_parent" name="parent_type">
+
+        <div class="form-group">
+            <label for="text">Point Text</label>
+            <textarea name="text" id="text" class="form-control" placeholder="Enter the text..." required autofocus></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="text">Hint</label>
+            <input type="text" name="hint" id="hint" class="form-control" placeholder="Enter an optional hint...">
+        </div>
+       
+        <div class="form-group" style="padding: 0px 15px;">
+            <label style="padding-right: 15px;">Does this text have support for blank-fill? </label>
+            <input type="radio" name="blank_fill" value="No" checked>
+            <label for="blank_fill" style="padding-right: 15px;">No</label>
+            <input type="radio" name="blank_fill" value="Yes">
+            <label for="blank_fill" style="padding-right: 15px;">Yes</label>
+            <br>
+            <label style="padding-right: 15px;">Should this point use numeric points for children? </label>
+            <input type="radio" name="numeric" value="No" checked>
+            <label for="numeric" style="padding-right: 15px;">No</label>
+            <input type="radio" name="numeric" value="Yes">
+            <label for="numeric" style="padding-right: 15px;">Yes</label>
+        </div>
+        <div style="display: flex;">
+            <button class="btn btn-outline-danger" type="button" style="flex-grow: 1;" onclick="hideForm('add');">Exit Form</button>
+            <button class="btn btn-outline-success" style="flex-grow: 1;" id="form_submit">PENDING</button>
+        </div>
+    </form>
+</div>
+
+<div class="tree-form-div" id="delete_form" style="display: none;">
+    <h4 id="form_header">Delete Node</h4>
+    <form method="POST" class="tree-form" style="text-align: center;">
+        <input type="hidden" id="form_id">
+
+        <p>
+            Are you sure you want to delete this node?<br>
+            This action is <b>irreversible</b> and will delete all of this node's children.
+        </p>
+
+        <div style="display: flex">
+            <button class="btn btn-outline-danger" type="button" style="flex-grow: 1;" onclick="hideForm('delete');">Exit Form</button>
+            <button class="btn btn-outline-primary" style="flex-grow: 1;" id="form_submit">Delete Node</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    function hideForm(type) {
+        if (type == "add") 
+            document.getElementById("form_div").style.display = "none";
+        else
+            document.getElementById("delete_form").style.display = "none";
+    }
+
+    function showForm(id, title, parent_type) {
+
+        if (title == "Delete") {
+            document.getElementById("delete_form").style.display = "block";
+        } else {
+            document.getElementById("form_id").value = id;
+            document.getElementById("form_title").value = title;
+            document.getElementById("form_parent").value = parent_type;
+            document.getElementById("form_header").innerText = title;
+            document.getElementById("form_submit").innerText = title;
+            document.getElementById("form_div").style.display = "block";
+        }
+    }
+
+</script>

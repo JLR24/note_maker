@@ -20,7 +20,7 @@ class Course(db.Model): # Example: Warwick Computer Science
 
     def getModules(self):
         '''Returns a list of the course's modules.'''
-        return Module.query.filter_by(course=self.id).all()
+        return sorted(Module.query.filter_by(course=self.id).all(), key=lambda i: i.name)
     
     def getAttempts(self):
         '''Returns the integer number of revision attempts for the course.'''
@@ -68,6 +68,7 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     hint = db.Column(db.String(4096)) # Available to be shown (for example, "list 3 advantages")
     parent = db.Column(db.Integer) # If isRoot==True, then this points to a heading. Otherwise to another point.
     isRoot = db.Column(db.Boolean) # Can this be a starting point for a question (list the points below this one)?
+    numeric = db.Column(db.Boolean, default=False) # If numeric, use <ol>, otherwise use <ul>
     successes = db.Column(db.Integer, default=0)
     failures = db.Column(db.Integer, default=0)
     last_answered = db.Column(db.DateTime(timezone=True))

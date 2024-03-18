@@ -23,3 +23,57 @@
 .tree-points {
     padding-left: 60px;
 }
+
+.tree-btn {
+    padding: 5px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.tree-btn:hover {
+    text-decoration: none;
+    background-color: rgb(220, 220, 220);
+}
+
+.tree-child {
+    color: #007bff;
+}
+
+.tree-sibling {
+    color: limegreen;
+}
+
+.tree-delete {
+    color: red;
+}
+
+.tree-child:hover {
+    color: #007bff;
+}
+
+.tree-sibling:hover {
+    color: limegreen;
+}
+
+.tree-delete:hover {
+    color: red;
+}
+
+.tree-form-div {
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    z-index: 10;
+    width: 60%;
+    height: 60%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: white;
+    padding: 40px;
+    overflow: scroll;
+}
+
+.tree-form {
+    display: flex;
+    flex-direction: column;
+}

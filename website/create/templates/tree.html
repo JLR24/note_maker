@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %} Creation Tree for {{ course.name }} {% endblock %}
+
+{% block content %}
+
+    <h1>"{{ course.name }}" - Creation Tree:</h1><br>
+
+    {% for module in course.getModules() %}
+
+        <h2 class="tree-module">{{ module.name }}:</h2>
+
+        {% for heading in module.getHeadings() %}
+
+            <h3 class="tree-heading">{{ heading.text }}:</h3>
+
+            <ul>
+                {% for node in heading.getPoints() %}
+
+                    <li>
+                        {{ node.text }}
+                        <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
+                        <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'point');">&plus;</button>
+                        <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
+                    </li>
+
+                    {%- for item in node.getChildren() recursive %}
+
+                        <ul>
+                            <li>
+                                {{ item.text }}
+                                <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
+                                <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'point');">&plus;</button>
+                                <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
+                            </li>
+
+                            {{ loop(item.getChildren()) }}
+                            
+                        </ul>
+                    {%- endfor %}
+                {% else %}
+                    <li>
+                        <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ heading.id }}', 'Add Child', 'heading');">&#8626;</button>
+                        <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ heading.id }}', 'Delete', 'heading');">&times;</button>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        {% endfor %}
+        <h3 class="tree-heading"><a href="/create/add_heading?m={{ module.id }}">Add Heading</a></h3>
+
+        <br><hr><br>
+    {% endfor %}
+    <h2 class="tree-module"><a href="/create/add_module">Add Module</a></h2>
+
+    <p>
+        Create a popup form for add child/sibling, and delete. Two hidden elements (node ID and button title).<br>
+        If delete, show confirmation only.
+        If add*, show necessary inputs (text, radios, etc).
+    </p>
+
+    {% include "tree_form.html" %}
+
+{% endblock %}

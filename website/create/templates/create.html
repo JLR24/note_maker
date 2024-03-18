@@ -25,6 +25,8 @@
             <div>
                 <b><a href="/create/{{course.id}}" style="color: inherit">{{ course.name }}</a></b> ({{ course.getModules() | length }} modules) - {{ course.getAttempts() }} attempts.
             </div>
+        {% else %}
+            <p>No courses yet!</p>
         {% endfor %}
     </div>
 
