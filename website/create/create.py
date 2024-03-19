@@ -93,7 +93,6 @@ def edit_tree():
         course = p.getCourse()
         db.session.delete(p)
         db.session.commit()
-        flash("Node deleted!", category="success")
 
     elif request.form.get("title") == "Add Child":
         # Check if this is a root or not.
@@ -126,7 +125,6 @@ def edit_tree():
         )
         db.session.add(point)
         db.session.commit()
-        flash("Point added!", category="success")
         anchor = point.id
     # Now handle add siblings. Get parent of node and add.
     elif request.form.get("title") == "Add Sibling":
@@ -159,7 +157,6 @@ def edit_tree():
         )
         db.session.add(point)
         db.session.commit()
-        flash("Point added!", category="success")
         anchor = point.id
     else:
         flash("Invalid details!", category="error")

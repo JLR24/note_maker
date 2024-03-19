@@ -24,13 +24,14 @@
                         <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
                     </li>
 
+
+                    {% if node.numeric %}
+                    <ol>
+                    {% else %}
+                    <ul>
+                    {% endif %}
                     {%- for item in node.getChildren() recursive %}
 
-                        {% if item.numeric %}
-                        <ol>
-                        {% else %}
-                        <ul>
-                        {% endif %}
                             <li>
                                 {{ item.text }}
                                 <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
@@ -38,14 +39,26 @@
                                 <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ item.id }}', 'Delete', 'point');">&times;</button>
                             </li>
 
-                            {{ loop(item.getChildren()) }}
+                            {% if item.getChildren() %}
+                                {% if item.numeric %}
+                                <ol>
+                                {% else %}
+                                <ul>
+                                {% endif %}
+                                    {{ loop(item.getChildren()) }}
+                                {% if item.numeric %}
+                                </ol>
+                                {% else %}
+                                </ul>
+                                {% endif %}
+                            {% endif %}
 
-                        {% if item.numeric %}
-                        </ol>
-                        {% else %}
-                        </ul>
-                        {% endif %}
                     {%- endfor %}
+                    {% if node.numeric %}
+                    </ol>
+                    {% else %}
+                    </ul>
+                    {% endif %}
                 {% else %}
                     <li>
                         <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ heading.id }}', 'Add Child', 'heading');">&#8626;</button>
