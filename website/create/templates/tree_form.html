@@ -56,10 +56,17 @@
 
 <script type="text/javascript">
 
+    // Source: https://stackoverflow.com/questions/3369593/how-to-detect-escape-key-press
+    document.body.addEventListener("keydown", function(e) {
+        if (e.key == "Escape" && (document.getElementById("form_div").style.display == "block" || document.getElementById("delete_form").style.display == "none")) {
+            hideForm();
+        }
+    })
+
     function hideForm(type) {
-        if (type == "add") 
+        // if (type == "add") 
             document.getElementById("form_div").style.display = "none";
-        else
+        // else
             document.getElementById("delete_form").style.display = "none";
     }
 
