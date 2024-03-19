@@ -79,6 +79,10 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     
     def getCourse(self):
         '''Returns the Point's Course object'''
+        return self.getHeading().getCourse()
+    
+    def getHeading(self):
+        '''Returns the Point's Heading object'''
         if self.isRoot:
             heading = Heading.query.filter_by(id=self.parent).first()
         else:
@@ -86,4 +90,10 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
             while point.isRoot == False:
                 point = Point.query.filter_by(id=point.parent).first()
             heading = Heading.query.filter_by(id=point.parent).first()
-        return heading.getCourse()
+        return heading
+    
+    def getParent(self):
+        '''Returns the point's parent (Heading or Point)'''
+        if self.isRoot:
+            return Heading.query.get(self.parent)
+        return Point.query.get(self.parent)

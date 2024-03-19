@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Creation Tree for {{ course.name }} {% endblock %}
+{% block title %} Creation Tree for "{{ course.name }}" {% endblock %}
 
 {% block content %}
 
@@ -26,17 +26,25 @@
 
                     {%- for item in node.getChildren() recursive %}
 
+                        {% if item.numeric %}
+                        <ol>
+                        {% else %}
                         <ul>
+                        {% endif %}
                             <li>
                                 {{ item.text }}
-                                <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
-                                <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'point');">&plus;</button>
-                                <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
+                                <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
+                                <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ item.id }}', 'Add Sibling', 'point');">&plus;</button>
+                                <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ item.id }}', 'Delete', 'point');">&times;</button>
                             </li>
 
                             {{ loop(item.getChildren()) }}
-                            
+
+                        {% if item.numeric %}
+                        </ol>
+                        {% else %}
                         </ul>
+                        {% endif %}
                     {%- endfor %}
                 {% else %}
                     <li>

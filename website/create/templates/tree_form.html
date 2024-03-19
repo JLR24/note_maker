@@ -1,6 +1,6 @@
 <div class="tree-form-div" id="form_div" style="display: none;">
     <h4 id="form_header">PENDING</h4>
-    <form method="POST" class="tree-form">
+    <form method="POST" class="tree-form" action="{{ url_for('create.edit_tree') }}">
         <input type="hidden" id="form_id" name="id">
         <input type="hidden" id="form_title" name="title">
         <input type="hidden" id="form_parent" name="parent_type">
@@ -37,8 +37,10 @@
 
 <div class="tree-form-div" id="delete_form" style="display: none;">
     <h4 id="form_header">Delete Node</h4>
-    <form method="POST" class="tree-form" style="text-align: center;">
-        <input type="hidden" id="form_id">
+    <form method="POST" class="tree-form" style="text-align: center;" action="{{ url_for('create.edit_tree') }}">
+        <input type="hidden" id="del_form_id" name="id">
+        <input type="hidden" id="del_form_parent" name="parent_type">
+        <input type="hidden" id="del_form_title" name="title" value="Delete">
 
         <p>
             Are you sure you want to delete this node?<br>
@@ -64,6 +66,8 @@
     function showForm(id, title, parent_type) {
 
         if (title == "Delete") {
+            document.getElementById("del_form_id").value = id;
+            document.getElementById("del_form_parent").value = parent_type;
             document.getElementById("delete_form").style.display = "block";
         } else {
             document.getElementById("form_id").value = id;
