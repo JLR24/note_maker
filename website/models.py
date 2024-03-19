@@ -97,3 +97,12 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
         if self.isRoot:
             return Heading.query.get(self.parent)
         return Point.query.get(self.parent)
+    
+    # def isPointChild(self, point_id):
+    #     '''Returns true if the GIVEN point ID references a point that is a child of the current point.'''
+    #     if self.id == point_id:
+    #         return True
+    #     for child in self.getChildren():
+    #         if child.isPointChild(point_id):
+    #             return True
+    #     return False

@@ -30,7 +30,7 @@ def tree(id):
         flash("Invalid details!", category="error")
         return redirect(url_for("home.index"))
     session["course"] = id
-    return render_template("tree.html", user=current_user, course=course)
+    return render_template("tree.html", user=current_user, course=course, m=request.args.get("m"), h=request.args.get("h"))
 
 
 @create.route("/add_module", methods=["GET", "POST"])
@@ -99,6 +99,8 @@ def edit_tree():
             flash("Invalid details!", category="error")
             return redirect(url_for("create.index"))
         course = p.getCourse()
+        heading = p.getHeading()
+        module = heading.getModule()
         deletePoint(p)
         db.session.commit()
 
@@ -134,6 +136,8 @@ def edit_tree():
         db.session.add(point)
         db.session.commit()
         anchor = point.id
+        heading = point.getHeading()
+        module = heading.getModule()
     elif request.form.get("title") == "Add Sibling":
         
         sibling = Point.query.get(int(request.form.get("id")))
@@ -160,10 +164,12 @@ def edit_tree():
         db.session.add(point)
         db.session.commit()
         anchor = point.id
+        heading = point.getHeading()
+        module = heading.getModule()
     else:
         flash("Invalid details!", category="error")
         return redirect(url_for("create.index"))
-    return redirect(url_for("create.tree", id=course.id, _anchor=anchor))
+    return redirect(url_for("create.tree", id=course.id, _anchor=anchor, m=module.id, h=heading.id))
 
 
 # @create.route("/add_point", methods=["GET", "POST"])

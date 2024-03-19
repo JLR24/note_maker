@@ -9,11 +9,11 @@
     {% for module in course.getModules() %}
         
         <h2 class="tree-module" onclick="toggleMenu('m_{{module.id}}');">{{ module.name }}:</h2>
-        <div id="m_{{module.id}}" style="display: none;">
+        <div id="m_{{module.id}}" {% if m != module.id | string %} style="display: none;" {% endif %}>
             {% for heading in module.getHeadings() %}
 
                 <h3 class="tree-heading" onclick="toggleMenu('h_{{heading.id}}');">{{ heading.text }}:</h3>
-                <div id="h_{{heading.id}}" style="display: none;">
+                <div id="h_{{heading.id}}" {% if h != heading.id | string %} style="display: none;" {% endif %}>
                     <ul>
                         {% for node in heading.getPoints() %}
 

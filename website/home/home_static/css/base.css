@@ -3,7 +3,8 @@
     border-left: 10px solid rgb(45, 45, 45);
     border-right: 10px solid rgb(45, 45, 45);
     background-color: white;
-    height: 100vh;
+    padding-bottom: 0px;
+    min-height: 100vh;
 }
 
 .input-group * {
