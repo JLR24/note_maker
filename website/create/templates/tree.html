@@ -7,72 +7,74 @@
     <h1>"{{ course.name }}" - Creation Tree:</h1><br>
 
     {% for module in course.getModules() %}
+        
+        <h2 class="tree-module" onclick="toggleMenu('m_{{module.id}}');">{{ module.name }}:</h2>
+        <div id="m_{{module.id}}" style="display: none;">
+            {% for heading in module.getHeadings() %}
 
-        <h2 class="tree-module">{{ module.name }}:</h2>
-
-        {% for heading in module.getHeadings() %}
-
-            <h3 class="tree-heading">{{ heading.text }}:</h3>
-
-            <ul>
-                {% for node in heading.getPoints() %}
-
-                    <li onmouseenter="showMenu('{{node.id}}');" onmouseleave="hideMenu('{{node.id}}');" style="line-height: 40px;">
-                        {{ node.text }}
-                        <span style="display: none" id="{{node.id}}">
-                            <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
-                            <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'heading');">&plus;</button>
-                            <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
-                        </span>
-                    </li>
-
-
-                    {% if node.numeric %}
-                    <ol>
-                    {% else %}
+                <h3 class="tree-heading" onclick="toggleMenu('h_{{heading.id}}');">{{ heading.text }}:</h3>
+                <div id="h_{{heading.id}}" style="display: none;">
                     <ul>
-                    {% endif %}
-                    {%- for item in node.getChildren() recursive %}
+                        {% for node in heading.getPoints() %}
 
-                            <li onmouseenter="showMenu('{{item.id}}');" onmouseleave="hideMenu('{{item.id}}');" style="line-height: 40px;">
-                                {{ item.text }}
-                                <span style="display: none" id="{{item.id}}">
-                                    <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
-                                    <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ item.id }}', 'Add Sibling', 'point');">&plus;</button>
-                                    <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ item.id }}', 'Delete', 'point');">&times;</button>
+                            <li onmouseenter="showMenu('s_{{node.id}}');" onmouseleave="hideMenu('s_{{node.id}}');" style="line-height: 40px;" id="{{node.id}}">
+                                {{ node.text }}
+                                <span style="display: none" id="s_{{node.id}}">
+                                    <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
+                                    <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'heading');">&plus;</button>
+                                    <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
                                 </span>
                             </li>
 
-                            {% if item.getChildren() %}
-                                {% if item.numeric %}
-                                <ol>
-                                {% else %}
-                                <ul>
-                                {% endif %}
-                                    {{ loop(item.getChildren()) }}
-                                {% if item.numeric %}
-                                </ol>
-                                {% else %}
-                                </ul>
-                                {% endif %}
+
+                            {% if node.numeric %}
+                            <ol>
+                            {% else %}
+                            <ul>
                             {% endif %}
+                            {%- for item in node.getChildren() recursive %}
 
-                    {%- endfor %}
-                    {% if node.numeric %}
-                    </ol>
-                    {% else %}
+                                    <li onmouseenter="showMenu('s_{{item.id}}');" onmouseleave="hideMenu('s_{{item.id}}');" style="line-height: 40px;" id="{{item.id}}">
+                                        {{ item.text }}
+                                        <span style="display: none" id="s_{{item.id}}">
+                                            <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
+                                            <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ item.id }}', 'Add Sibling', 'point');">&plus;</button>
+                                            <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ item.id }}', 'Delete', 'point');">&times;</button>
+                                        </span>
+                                    </li>
+
+                                    {% if item.getChildren() %}
+                                        {% if item.numeric %}
+                                        <ol>
+                                        {% else %}
+                                        <ul>
+                                        {% endif %}
+                                            {{ loop(item.getChildren()) }}
+                                        {% if item.numeric %}
+                                        </ol>
+                                        {% else %}
+                                        </ul>
+                                        {% endif %}
+                                    {% endif %}
+
+                            {%- endfor %}
+                            {% if node.numeric %}
+                            </ol>
+                            {% else %}
+                            </ul>
+                            {% endif %}
+                        {% else %}
+                            <li>
+                                <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ heading.id }}', 'Add Child', 'heading');">&#8626;</button>
+                                <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ heading.id }}', 'Delete', 'heading');">&times;</button>
+                            </li>
+                        {% endfor %}
                     </ul>
-                    {% endif %}
-                {% else %}
-                    <li>
-                        <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ heading.id }}', 'Add Child', 'heading');">&#8626;</button>
-                        <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ heading.id }}', 'Delete', 'heading');">&times;</button>
-                    </li>
-                {% endfor %}
-            </ul>
+                </div>
 
-        {% endfor %}
-        <h3 class="tree-heading"><a href="/create/add_heading?m={{ module.id }}">Add Heading</a></h3>
+            {% endfor %}
+            <h3 class="tree-heading"><a href="/create/add_heading?m={{ module.id }}">Add Heading</a></h3>
+        </div>
 
         <br><hr><br>
     {% endfor %}
@@ -87,6 +89,14 @@
 
         function hideMenu(id) {
             document.getElementById(id).style.display = "none";
+        }
+
+        function toggleMenu(id) {
+            if (document.getElementById(id).style.display == "none") {
+                document.getElementById(id).style.display = "block";
+            } else {
+                document.getElementById(id).style.display = "none";
+            }
         }
     </script>
 
