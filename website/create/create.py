@@ -130,7 +130,37 @@ def edit_tree():
         anchor = point.id
     # Now handle add siblings. Get parent of node and add.
     elif request.form.get("title") == "Add Sibling":
-        pass
+        
+
+        if request.form.get("parent_type") == "point":
+            sibling = Point.query.get(int(request.form.get("id")))
+            isRoot = False
+        else:
+            sibling = Heading.query.get(int(request.form.get("id")))
+            isRoot = True
+        if not sibling or not sibling.getParent():
+            flash("Invalid details!", category="error")
+            return redirect(url_for("create.index"))
+        course = sibling.getCourse()
+        blankFill = True
+        if request.form.get("blank_fill") == "No":
+            blankFill = False
+        numeric = True
+        if request.form.get("numeric") == "No":
+            numeric = False
+
+        point = Point(
+            text = request.form.get("text"),
+            blankFill = blankFill,
+            hint = request.form.get("hint"),
+            parent = sibling.parent,
+            isRoot = isRoot,
+            numeric = numeric
+        )
+        db.session.add(point)
+        db.session.commit()
+        flash("Point added!", category="success")
+        anchor = point.id
     else:
         flash("Invalid details!", category="error")
         return redirect(url_for("create.index"))
