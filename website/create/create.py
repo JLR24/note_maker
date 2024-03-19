@@ -74,6 +74,14 @@ def add_heading():
     return render_template("add_heading.html", user=current_user, course=course, module=module)
 
 
+def deletePoint(point):
+    '''Recursively deletes the children of the given point, then deletes the point.'''
+    if len(point.getChildren()) > 0:
+        for child in point.getChildren():
+            deletePoint(child)
+    db.session.delete(point)
+
+
 @create.route("/edit_tree", methods=["POST"])
 @login_required
 def edit_tree():
@@ -91,7 +99,7 @@ def edit_tree():
             flash("Invalid details!", category="error")
             return redirect(url_for("create.index"))
         course = p.getCourse()
-        db.session.delete(p)
+        deletePoint(p)
         db.session.commit()
 
     elif request.form.get("title") == "Add Child":
@@ -126,17 +134,11 @@ def edit_tree():
         db.session.add(point)
         db.session.commit()
         anchor = point.id
-    # Now handle add siblings. Get parent of node and add.
     elif request.form.get("title") == "Add Sibling":
         
+        sibling = Point.query.get(int(request.form.get("id")))
 
-        if request.form.get("parent_type") == "point":
-            sibling = Point.query.get(int(request.form.get("id")))
-            isRoot = False
-        else:
-            sibling = Heading.query.get(int(request.form.get("id")))
-            isRoot = True
-        if not sibling or not sibling.getParent():
+        if not sibling:
             flash("Invalid details!", category="error")
             return redirect(url_for("create.index"))
         course = sibling.getCourse()
@@ -152,7 +154,7 @@ def edit_tree():
             blankFill = blankFill,
             hint = request.form.get("hint"),
             parent = sibling.parent,
-            isRoot = isRoot,
+            isRoot = sibling.isRoot,
             numeric = numeric
         )
         db.session.add(point)

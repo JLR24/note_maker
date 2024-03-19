@@ -17,11 +17,13 @@
             <ul>
                 {% for node in heading.getPoints() %}
 
-                    <li>
+                    <li onmouseenter="showMenu('{{node.id}}');" onmouseleave="hideMenu('{{node.id}}');" style="line-height: 40px;">
                         {{ node.text }}
-                        <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
-                        <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'point');">&plus;</button>
-                        <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
+                        <span style="display: none" id="{{node.id}}">
+                            <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
+                            <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'heading');">&plus;</button>
+                            <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
+                        </span>
                     </li>
 
 
@@ -32,11 +34,13 @@
                     {% endif %}
                     {%- for item in node.getChildren() recursive %}
 
-                            <li>
+                            <li onmouseenter="showMenu('{{item.id}}');" onmouseleave="hideMenu('{{item.id}}');" style="line-height: 40px;">
                                 {{ item.text }}
-                                <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
-                                <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ item.id }}', 'Add Sibling', 'point');">&plus;</button>
-                                <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ item.id }}', 'Delete', 'point');">&times;</button>
+                                <span style="display: none" id="{{item.id}}">
+                                    <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
+                                    <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ item.id }}', 'Add Sibling', 'point');">&plus;</button>
+                                    <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ item.id }}', 'Delete', 'point');">&times;</button>
+                                </span>
                             </li>
 
                             {% if item.getChildren() %}
@@ -75,5 +79,15 @@
     <h2 class="tree-module"><a href="/create/add_module">Add Module</a></h2>
 
     {% include "tree_form.html" %}
+
+    <script>
+        function showMenu(id) {
+            document.getElementById(id).style.display = "inline";
+        }
+
+        function hideMenu(id) {
+            document.getElementById(id).style.display = "none";
+        }
+    </script>
 
 {% endblock %}

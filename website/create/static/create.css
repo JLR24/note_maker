@@ -25,9 +25,10 @@
 }
 
 .tree-btn {
-    padding: 5px;
+    /* padding: 5px; */
     font-weight: bold;
     border-radius: 5px;
+    /* height: 40px; */
 }
 
 .tree-btn:hover {
