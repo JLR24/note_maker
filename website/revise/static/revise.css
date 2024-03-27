@@ -1,0 +1,19 @@
+.revise-input {
+    width: 100%;
+    margin-bottom: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: rgb(247, 247, 247);
+}
+
+.revise-input:focus {
+    background-color: white;
+}
+
+.revise-input-correct {
+    background-color: rgba(50, 205, 50, 0.3);
+}
+
+.revise-input-incorrect {
+    background-color: rgba(255, 0, 0, 0.3);
+}

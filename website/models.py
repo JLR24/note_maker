@@ -1,5 +1,6 @@
 from . import db
 from flask_login import UserMixin
+import string
 
 
 class User(db.Model, UserMixin):
@@ -40,6 +41,9 @@ class Module(db.Model): # Example: CS126 -> Design of Information Structures
     def getCourse(self):
         '''Returns the Module's Course object.'''
         return Course.query.filter_by(id=self.course).first()
+    
+    def _getChildren(self):
+        return self.getHeadings()
 
 
 class Heading(db.Model): # Example: Sorting Algorithms
@@ -59,6 +63,9 @@ class Heading(db.Model): # Example: Sorting Algorithms
     def getCourse(self):
         '''Returns the Course object for the Heading.'''
         return self.getModule().getCourse()
+    
+    def _getChildren(self):
+        return self.getPoints()
 
 
 class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)]
@@ -76,6 +83,9 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     def getChildren(self):
         '''Returns a list of Points of all children nodes for the Point.'''
         return Point.query.filter_by(isRoot=False, parent=self.id).all()
+    
+    def _getChildren(self):
+        return self.getChildren()
     
     def getCourse(self):
         '''Returns the Point's Course object'''
@@ -98,6 +108,15 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
             return Heading.query.get(self.parent)
         return Point.query.get(self.parent)
     
+    def checkAnswer(self, answer):
+        '''Strips punctuation and make lower case. Then compares the answer string to the point's text.'''
+        return formatString(answer) == formatString(self.text)
+    
+def formatString(text):
+    '''Returns the given string in lower case w/o punctuation.'''
+    # Remove puncuation. Source: https://stackoverflow.com/questions/265960/best-way-to-strip-punctuation-from-a-string (11/03/2024, from CS133 revision project).
+    return str(text).lower().translate(str.maketrans('', '', string.punctuation))
+
     # def isPointChild(self, point_id):
     #     '''Returns true if the GIVEN point ID references a point that is a child of the current point.'''
     #     if self.id == point_id:

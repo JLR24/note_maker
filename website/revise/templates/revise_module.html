@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %} Revise "{{ module.name }}" {% endblock %}
+
+{% block content %}
+
+    <h1>Revise Module "<i>{{ module.name }}</i>":</h1><br>
+
+    <p>Correct Answers: {{ count }}</p>
+
+    <form method="POST">
+        <input type="hidden" name="module" value="{{ module.id }}">
+        {% for heading in module.getHeadings() %}
+
+            <h2>{{ heading.text }}</h2>
+
+            <ul>
+                {% for node in heading.getPoints() %}
+
+                    <li>{{ node.text }}</li>
+
+                    {% if node.numeric %}
+                        <ol>
+                    {% else %}
+                        <ul>
+                    {% endif %}
+
+                    {%- for item in node.getChildren() recursive %}
+
+                        <li>
+                            <input type="text" name="{{ item.id }}"
+                                {% if results[item.id] %} 
+                                    value="{{ results[item.id] }}" 
+                                    {% if item.checkAnswer(results[item.id]) %}
+                                        class = "revise-input revise-input-correct"
+                                    {% else %}
+                                        class = "revise-input revise-input-incorrect"
+                                    {% endif %}
+                                {% else %} 
+                                    class="revise-input" 
+                                {% endif %}
+                                {% if item.hint %}
+                                    placeholder="Hint: {{ item.hint }}"
+                                {% endif %}
+                            >
+                        </li>
+
+                        {% if item.getChildren() | length > 0 %}
+
+                            {% if item.numeric %}
+                                <ol>
+                            {% else %}
+                                <ul>
+                            {% endif %}
+
+                                {{ loop(item.getChildren()) }}
+
+                            {% if item.numeric %}
+                                </ol>
+                            {% else %}
+                                </ul>
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if node.numeric %}
+                        </ol>
+                    {% else %}
+                        </ul>
+                    {% endif %}
+
+                {% endfor %}
+            </ul>
+
+        {% endfor %}
+        <input type="hidden" name="time" id="time" value="{{ start }}">
+        <input type="hidden" name="start" id="start" value="{{ start }}">
+        <a href="/revise/module/{{ module.id }}" class="btn btn-outline-danger">Restart</a>
+        <input type="submit" value="Check Answers" class="btn btn-outline-success">
+        <span style="padding-left: 50%;" id="timer">-- seconds</span>
+    </form>
+
+    <script>
+        window.onload = function() {
+            if (document.getElementById("start").value == "0") {
+                document.getElementById("start").value = Date.now();
+            }
+
+            setTimeout(updateDisplay, 1000);
+        }
+
+        function updateDisplay() {
+            let time = formatTime();
+            document.getElementById("timer").innerText = time;
+            document.getElementById("time").value = time;
+            setTimeout(updateDisplay, 1000);
+        }
+
+        function formatTime() { 
+            let time = parseInt(Date.now() - document.getElementById("start").value);  
+
+            let seconds = Math.floor((time / 1000) % 60);
+            let minutes = Math.floor((time / (1000 * 60)) % 60);
+            let hours = Math.floor((minutes / (1000 * 60 * 60)) % 24);
+
+            if (seconds == 1) s = " second";
+            else s = " seconds";
+            if (minutes == 1) m = " minute";
+            else m = " minutes";
+            if (hours == 1) h = " hour";
+            else h = " hours";
+
+            if (minutes < 1) return seconds + s;
+            if (hours < 1) return minutes + m + ", " + seconds + s;
+            return hours + ":" + minutes + "." + seconds;
+        }
+    </script>
+
+{% endblock %}
