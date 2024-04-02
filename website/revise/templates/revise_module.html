@@ -17,7 +17,28 @@
             <ul>
                 {% for node in heading.getPoints() %}
 
-                    <li>{{ node.text }}</li>
+                    <li>
+                        <div style="display: flex;">
+                        {{ node.question() }}
+                        {% if node.blankFill %}
+                            <input type="text" name="{{ node.id }}" {% if results[node.id] %} 
+                                value="{{ results[node.id] }}" 
+                                {% if node.checkAnswer(results[node.id]) %}
+                                    class = "revise-blank-input revise-input-correct"
+                                {% else %}
+                                    class = "revise-blank-input revise-input-incorrect"
+                                {% endif %}
+                            {% else %} 
+                                class="revise-blank-input" 
+                            {% endif %}
+                            {% if node.hint %}
+                                placeholder="Hint: {{ node.hint }}"
+                            {% endif %}
+                            >
+                        {% endif %}
+                        </div>
+                    </li>
+
 
                     {% if node.numeric %}
                         <ol>

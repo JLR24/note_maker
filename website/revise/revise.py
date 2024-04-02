@@ -52,7 +52,7 @@ def checkModuleAnswers(module):
 def checkChildren(results, count, point):
     for item in point._getChildren():
         results, count = checkChildren(results, count, item)
-    if type(point) == Point and not point.isRoot:
+    if (type(point) == Point and not point.isRoot) or (type(point) == Point and point.blankFill and point.isRoot):
         results[point.id] = request.form.get(f"{point.id}")
     if type(point) == Point and point.checkAnswer(request.form.get(f"{point.id}")):
         count += 1

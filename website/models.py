@@ -110,7 +110,48 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     
     def checkAnswer(self, answer):
         '''Strips punctuation and make lower case. Then compares the answer string to the point's text.'''
+        if self.blankFill and self.isRoot:
+            return formatString(answer) == formatString(self.answer())
         return formatString(answer) == formatString(self.text)
+    
+    def format(self):
+        '''If the point is blank-fill capable, it returns the default string.'''
+        return str(self.text).replace(">|<", "")
+    
+    def question(self):
+        '''If the point is blank-fill capable, it returns just the question string'''
+        try:
+            return str(self.text)[0: str(self.text).index(">|<")]
+        except Exception as e:
+            print("Error: " + str(e))
+            return self.text
+    
+    def answer(self):
+        '''If the point is blank-fill capable, it returns just the answer string'''
+        try:
+            return str(self.text)[str(self.text).index(">|<") + 4 : len(self.text)]
+        except:
+            return ""
+    
+    # def format(self):
+    #     '''If the point is blank-fill capable, it returns the default string.'''
+    #     if self.blankFill:
+    #         return str(self.text).replace("<", "").replace(">", "")
+    #     else:
+    #         return self.text
+        
+    # def question(self):
+    #     '''If the point is blank-fill capable, it returns just the question string'''
+    #     if not self.blankFill:
+    #         return self.text
+    #     return self.text[0 : str(self.text).index("<")] + self.text[str(self.text).index(">") : len(str(self.text)) - 1] 
+        
+    # def answer(self):
+    #     '''If the point is blank-fill capable, it returns just the answer string'''
+    #     if not self.blankFill:
+    #         return ""
+    #     return self.text[str(self.text).index("<"):str(self.text).index(">")]
+
     
 def formatString(text):
     '''Returns the given string in lower case w/o punctuation.'''
