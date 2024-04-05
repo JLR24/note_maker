@@ -116,7 +116,9 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     
     def format(self):
         '''If the point is blank-fill capable, it returns the default string.'''
-        return str(self.text).replace(">|<", "")
+        if self.blankFill:
+            return str(self.text).replace(">|<", "")
+        return self.text
     
     def question(self):
         '''If the point is blank-fill capable, it returns just the question string'''

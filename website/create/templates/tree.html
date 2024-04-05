@@ -18,7 +18,8 @@
                         {% for node in heading.getPoints() %}
 
                             <li onmouseenter="showMenu('s_{{node.id}}');" onmouseleave="hideMenu('s_{{node.id}}');" style="line-height: 40px;" id="{{node.id}}">
-                                {{ node.text }}
+                                <!-- {{ node.format() }} -->
+                                {{ node.question() }} <i style="color: grey;"> {{ node.answer() }} </i>
                                 <span style="display: none" id="s_{{node.id}}">
                                     <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
                                     <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'heading');">&plus;</button>

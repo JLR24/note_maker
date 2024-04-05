@@ -8,7 +8,7 @@
 
     <p>Correct Answers: {{ count }}</p>
 
-    <form method="POST">
+    <form method="POST" autocomplete="off">
         <input type="hidden" name="module" value="{{ module.id }}">
         {% for heading in module.getHeadings() %}
 
@@ -34,6 +34,8 @@
                             {% if node.hint %}
                                 placeholder="Hint: {{ node.hint }}"
                             {% endif %}
+                            autocomplete="off"
+                            
                             >
                         {% endif %}
                         </div>
