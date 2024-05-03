@@ -18,3 +18,17 @@ def current_nav():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# Pending features:
+# - Blank fill for child nodes.
+# - Support for in-line Latex (both in creation tree and when typing revision).
+# - Ability to toggle punctuation filter.
+# - Ability to toggle some leniency when answering questions 
+#       (enter numeric percentage, default as 90%).
+# - Properly select course, module, and heading to revise from.
+# - When revising, can choose one of three modes: full text, 
+#       random points (+count), or random blank-fill (+count).
+# Fix home page and explanation.
+# Make timer visible wherever you are on the page.
+# For full module/heading, store best time as well as number of attempts 
+#       to get all points right with the number of module/heading attempts.

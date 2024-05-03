@@ -25,6 +25,7 @@
                                 value="{{ results[node.id] }}" 
                                 {% if node.checkAnswer(results[node.id]) %}
                                     class = "revise-blank-input revise-input-correct"
+                                    tabindex="-1"
                                 {% else %}
                                     class = "revise-blank-input revise-input-incorrect"
                                 {% endif %}
@@ -55,6 +56,7 @@
                                     value="{{ results[item.id] }}" 
                                     {% if item.checkAnswer(results[item.id]) %}
                                         class = "revise-input revise-input-correct"
+                                        tabindex="-1"
                                     {% else %}
                                         class = "revise-input revise-input-incorrect"
                                     {% endif %}
