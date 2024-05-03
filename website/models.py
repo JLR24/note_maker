@@ -1,12 +1,15 @@
 from . import db
 from flask_login import UserMixin
 import string
+from sqlalchemy.sql import func
 
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(320))
     username = db.Column(db.String(128))
     password = db.Column(db.String(256))
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
     status = db.Column(db.String(64), default="user")
 
     def getCourses(self):
@@ -14,7 +17,7 @@ class User(db.Model, UserMixin):
         return Course.query.filter_by(user=self.id).all()
 
 
-class Course(db.Model): # Example: Warwick Computer Science
+class Course(db.Model): # Example: Warwick Computer Science - Year 1
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(512))
     user = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -30,9 +33,11 @@ class Course(db.Model): # Example: Warwick Computer Science
 
 class Module(db.Model): # Example: CS126 -> Design of Information Structures
     id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(16))
     name = db.Column(db.String(512))
     course = db.Column(db.Integer, db.ForeignKey("course.id"))
     attempts = db.Column(db.Integer, default=0)
+    time = db.Column(db.String(128))
 
     def getHeadings(self):
         '''Returns a list of the modules's headings.'''
@@ -51,6 +56,7 @@ class Heading(db.Model): # Example: Sorting Algorithms
     text = db.Column(db.String(512))
     module = db.Column(db.Integer, db.ForeignKey("module.id"))
     attempts = db.Column(db.Integer, default=0)
+    time = db.Column(db.String(128))
 
     def getPoints(self):
         '''Returns a list of the Heading's Point objects'''
@@ -76,6 +82,9 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     parent = db.Column(db.Integer) # If isRoot==True, then this points to a heading. Otherwise to another point.
     isRoot = db.Column(db.Boolean) # Can this be a starting point for a question (list the points below this one)?
     numeric = db.Column(db.Boolean, default=False) # If numeric, use <ol>, otherwise use <ul>
+    punc = db.Column(db.Boolean, default=True) # Remove punctuation when checking answers.
+    leniency = db.Column(db.Integer, default=90) # Match percentage between given answer and correct answer.
+    code = db.Column(db.Boolean, default=False) # Question requires code answer. Punc is overriden to False and a textarea is displayed instead of a standard 1-line input.
     successes = db.Column(db.Integer, default=0)
     failures = db.Column(db.Integer, default=0)
     last_answered = db.Column(db.DateTime(timezone=True))
