@@ -10,7 +10,7 @@ auth = Blueprint("auth", __name__, template_folder="templates", static_folder="s
 def login():
     if request.method == "POST":
         # Query the database for a user of the matching username
-        user = User.query.filter(User.username == request.form.get("username") and check_password_hash(User.password, request.form.get("password"))).first()
+        user = User.query.filter(User.username == request.form.get("username") and check_password_hash(User.password + str(User.date), request.form.get("password"))).first()
         if user:
             login_user(user, remember=True)
             flash(f"Welcome back, {user.username}!", category="success")
@@ -30,10 +30,11 @@ def signup():
             flash("That username is already taken.", category="error")
             return redirect(url_for("auth.signup"))
         user = User(
-            username = username,
-            password = generate_password_hash(request.form.get("password1"), method="sha256")
+            username = username
         )
         db.session.add(user)
+        db.session.commit()
+        user.password = generate_password_hash(request.form.get("password1") + str(user.date))
         db.session.commit()
         login_user(user, remember=True)
         flash(f"Welcome to the site, {username}!", category="success")
