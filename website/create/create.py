@@ -121,6 +121,12 @@ def edit_tree():
         numeric = True
         if request.form.get("numeric") == "No":
             numeric = False
+        punc = True
+        if request.form.get("punctuation") == "No":
+            punc = False
+        code = True
+        if request.form.get("code") == "No":
+            code = False
         isRoot = False
         if request.form.get("parent_type") == "heading":
             isRoot = True
@@ -131,7 +137,9 @@ def edit_tree():
             hint = request.form.get("hint"),
             parent = p.id,
             isRoot = isRoot,
-            numeric = numeric
+            numeric = numeric,
+            punc = punc,
+            code = code
         )
         db.session.add(point)
         db.session.commit()

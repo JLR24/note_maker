@@ -23,7 +23,7 @@ class Course(db.Model): # Example: Warwick Computer Science - Year 1
 
     def getModules(self):
         '''Returns a list of the course's modules.'''
-        return sorted(Module.query.filter_by(course=self.id).all(), key=lambda i: i.name)
+        return sorted(Module.query.filter_by(course=self.id).all(), key=lambda i: i.code)
     
     def getAttempts(self):
         '''Returns the integer number of revision attempts for the course.'''
@@ -56,6 +56,7 @@ class Heading(db.Model): # Example: Sorting Algorithms
     module = db.Column(db.Integer, db.ForeignKey("module.id"))
     attempts = db.Column(db.Integer, default=0)
     time = db.Column(db.String(128))
+    order = db.Column(db.Integer, default=0)
 
     def getPoints(self):
         '''Returns a list of the Heading's Point objects'''
@@ -87,6 +88,7 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     successes = db.Column(db.Integer, default=0)
     failures = db.Column(db.Integer, default=0)
     last_answered = db.Column(db.DateTime(timezone=True))
+    order = db.Column(db.Integer, default=0)
     
     def getChildren(self):
         '''Returns a list of Points of all children nodes for the Point.'''
@@ -119,8 +121,8 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     def checkAnswer(self, answer):
         '''Strips punctuation and make lower case. Then compares the answer string to the point's text.'''
         if self.blankFill and self.isRoot:
-            return formatString(answer) == formatString(self.answer())
-        return formatString(answer) == formatString(self.text)
+            return formatString(answer, self.punc) == formatString(self.answer(), self.punc)
+        return formatString(answer, self.punc) == formatString(self.text, self.punc)
     
     def format(self):
         '''If the point is blank-fill capable, it returns the default string.'''
@@ -142,37 +144,11 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
             return str(self.text)[str(self.text).index(">|<") + 4 : len(self.text)]
         except:
             return ""
-    
-    # def format(self):
-    #     '''If the point is blank-fill capable, it returns the default string.'''
-    #     if self.blankFill:
-    #         return str(self.text).replace("<", "").replace(">", "")
-    #     else:
-    #         return self.text
-        
-    # def question(self):
-    #     '''If the point is blank-fill capable, it returns just the question string'''
-    #     if not self.blankFill:
-    #         return self.text
-    #     return self.text[0 : str(self.text).index("<")] + self.text[str(self.text).index(">") : len(str(self.text)) - 1] 
-        
-    # def answer(self):
-    #     '''If the point is blank-fill capable, it returns just the answer string'''
-    #     if not self.blankFill:
-    #         return ""
-    #     return self.text[str(self.text).index("<"):str(self.text).index(">")]
 
     
-def formatString(text):
+def formatString(text, punc=True):
     '''Returns the given string in lower case w/o punctuation.'''
-    # Remove puncuation. Source: https://stackoverflow.com/questions/265960/best-way-to-strip-punctuation-from-a-string (11/03/2024, from CS133 revision project).
-    return str(text).lower().translate(str.maketrans('', '', string.punctuation))
-
-    # def isPointChild(self, point_id):
-    #     '''Returns true if the GIVEN point ID references a point that is a child of the current point.'''
-    #     if self.id == point_id:
-    #         return True
-    #     for child in self.getChildren():
-    #         if child.isPointChild(point_id):
-    #             return True
-    #     return False
+    # Remove puncuation. Source: https://stackoverflow.com/questions/265960/best-way-to-strip-punctuation-from-a-string (11/03/2024, from CS133 revision project) and https://stackoverflow.com/questions/8270092/remove-all-whitespace-in-a-string (04/05/2024).
+    if punc:
+        return " ".join(str(text).lower().split()).translate(str.maketrans('', '', string.punctuation))
+    return " ".join(str(text).lower().split())

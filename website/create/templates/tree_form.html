@@ -15,18 +15,42 @@
             <input type="text" name="hint" id="hint" class="form-control" placeholder="Enter an optional hint...">
         </div>
        
+        <div class="form-group" style="padding: 0px 15px;" style="display: flex;">
+            <table style="width: 100%">
+                <td style="width: 50%;">
+                    <label style="padding-right: 15px;">Is there support for blank-fill? </label>
+                    <input type="radio" name="blank_fill" value="No" checked id="blank_fill_no">
+                    <label for="blank_fill_no" style="padding-right: 15px;">No</label>
+                    <input type="radio" name="blank_fill" value="Yes" id="blank_fill_yes">
+                    <label for="blank_fill_yes" style="padding-right: 15px;">Yes</label>
+                </td>
+                <td style="width: 50%;">
+                <label style="padding-right: 15px;">Numeric Points for Children? </label>
+                <input type="radio" name="numeric" value="No" id="numeric_no" checked>
+                <label for="numeric_no" style="padding-right: 15px;">No</label>
+                <input type="radio" name="numeric" id="numeric_yes" value="Yes">
+                <label for="numeric_yes" style="padding-right: 15px;">Yes</label>
+                </td>
+            </table>
+        </div>
+
         <div class="form-group" style="padding: 0px 15px;">
-            <label style="padding-right: 15px;">Does this text have support for blank-fill? </label>
-            <input type="radio" name="blank_fill" value="No" checked>
-            <label for="blank_fill" style="padding-right: 15px;">No</label>
-            <input type="radio" name="blank_fill" value="Yes">
-            <label for="blank_fill" style="padding-right: 15px;">Yes</label>
-            <br>
-            <label style="padding-right: 15px;">Should this point use numeric points for children? </label>
-            <input type="radio" name="numeric" value="No" checked>
-            <label for="numeric" style="padding-right: 15px;">No</label>
-            <input type="radio" name="numeric" value="Yes">
-            <label for="numeric" style="padding-right: 15px;">Yes</label>
+            <table style="width: 100%;">
+                <td style="width: 50%;">
+                    <label style="padding-right: 15px;">Should punctuation be examined? </label>
+                    <input type="radio" name="punctuation" value="No" checked id="punctuation_no">
+                    <label for="punctuation_no" style="padding-right: 15px;">No</label>
+                    <input type="radio" name="punctuation" value="Yes" id="punctuation_yes">
+                    <label for="punctuation_yes" style="padding-right: 15px;">Yes</label>
+                </td>
+                <td style="width: 50%;">
+                    <label style="padding-right: 15px;">Does this contain code? </label>
+                    <input type="radio" name="code" value="No" checked id="code_no">
+                    <label for="code_no" style="padding-right: 15px;">No</label>
+                    <input type="radio" name="code" value="Yes" id="code_yes">
+                    <label for="code_yes" style="padding-right: 15px;">Yes</label>
+                </td>
+            </table>
         </div>
         <div style="display: flex;">
             <button class="btn btn-outline-danger" type="button" style="flex-grow: 1;" onclick="hideForm('add');">Exit Form</button>

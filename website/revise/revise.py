@@ -30,10 +30,11 @@ def module(m_id):
     if request.method == "POST":
         start = request.form.get("start")
         results, count = checkModuleAnswers(module)
-        print(len(results))
         if count == len(results):
             time = request.form.get("time")
             module.attempts += 1
+            if not module.time or module.time < time:
+                module.time = time
             db.session.commit()
             flash(f"All correct! Completed in: {time}.", category="success")
             return redirect(url_for("revise.index"))
@@ -42,6 +43,24 @@ def module(m_id):
 # Similar thing as above for headings.
 
 # And then random points within a course and module (for blank fill).
+
+def isBetterTime(module, js_time):
+    '''Returns True if the js_time is shorter than the module's time. False otherwise.'''
+    try:
+        module_int = getTimeStringAsInt(module.time)
+        js_int = getTimeStringAsInt(js_time)
+
+        if module_int >= js_int:
+            return False
+        return True
+    except:
+        print("Error in <revise.isBetterTime()>: module: " + module.id + "(" + module.time + ") jsTime: " + js_time)
+        return False
+    
+def getTimeStringAsInt(time_string):
+    '''Takes a string of the form 'x minute(s), y second(s)' and returns (x * 60 + y).'''
+    time_array = time_string.split(" ")
+    return int(time_array[0]) * 60 + int(time_array[2])
 
 
 def checkModuleAnswers(module):
