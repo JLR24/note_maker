@@ -20,7 +20,6 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 # Pending features:
-# - Blank fill for child nodes.
 # - Support for in-line Latex (both in creation tree and when typing revision).
 # - Ability to toggle some leniency when answering questions 
 #       (enter numeric percentage, default as 90%).

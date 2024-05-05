@@ -18,7 +18,6 @@
                         {% for node in heading.getPoints() %}
 
                             <li onmouseenter="showMenu('s_{{node.id}}');" onmouseleave="hideMenu('s_{{node.id}}');" style="line-height: 40px;" id="{{node.id}}">
-                                <!-- {{ node.format() }} -->
                                 {{ node.question() }} <i style="color: grey;"> {{ node.answer() }} </i>
                                 <span style="display: none" id="s_{{node.id}}">
                                     <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
@@ -36,7 +35,7 @@
                             {%- for item in node.getChildren() recursive %}
 
                                     <li onmouseenter="showMenu('s_{{item.id}}');" onmouseleave="hideMenu('s_{{item.id}}');" style="line-height: 40px;" id="{{item.id}}">
-                                        {{ item.text }}
+                                        {{ item.question() }} <i style="color: grey;"> {{ item.answer() }} </i>
                                         <span style="display: none" id="s_{{item.id}}">
                                             <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ item.id }}', 'Add Child', 'point');">&#8626;</button>
                                             <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ item.id }}', 'Add Sibling', 'point');">&plus;</button>

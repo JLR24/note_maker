@@ -51,23 +51,46 @@
                     {%- for item in node.getChildren() recursive %}
 
                         <li>
-                            <input type="text" name="{{ item.id }}"
-                                {% if results[item.id] %} 
-                                    value="{{ results[item.id] }}" 
-                                    {% if item.checkAnswer(results[item.id]) %}
-                                        class = "revise-input revise-input-correct"
-                                        tabindex="-1"
-                                    {% else %}
-                                        class = "revise-input revise-input-incorrect"
+                            {% if item.blankFill %}
+                                <div style="display: flex;">
+                                {{ item.question() }}
+                                    <input type="text" name="{{ item.id }}" 
+                                        {% if results[item.id] %} 
+                                            value="{{ results[item.id] }}" 
+                                            {% if item.checkAnswer(results[item.id]) %}
+                                                class = "revise-blank-input revise-input-correct"
+                                                tabindex="-1"
+                                            {% else %}
+                                                class = "revise-blank-input revise-input-incorrect"
+                                            {% endif %}
+                                        {% else %} 
+                                            class="revise-blank-input" 
+                                        {% endif %}
+                                        {% if item.hint %}
+                                            placeholder="Hint: {{ item.hint }}"
+                                        {% endif %}
+                                    autocomplete="off"
+                                    >
+                                </div>
+                            {% else %}
+                                <input type="text" name="{{ item.id }}"
+                                    {% if results[item.id] %} 
+                                        value="{{ results[item.id] }}" 
+                                        {% if item.checkAnswer(results[item.id]) %}
+                                            class = "revise-input revise-input-correct"
+                                            tabindex="-1"
+                                        {% else %}
+                                            class = "revise-input revise-input-incorrect"
+                                        {% endif %}
+                                    {% else %} 
+                                        class="revise-input" 
                                     {% endif %}
-                                {% else %} 
-                                    class="revise-input" 
-                                {% endif %}
-                                {% if item.hint %}
-                                    placeholder="Hint: {{ item.hint }}"
-                                {% endif %}
-                                autocomplete="off"
-                            >
+                                    {% if item.hint %}
+                                        placeholder="Hint: {{ item.hint }}"
+                                    {% endif %}
+                                    autocomplete="off"
+                                >
+                            {% endif %}
                         </li>
 
                         {% if item.getChildren() | length > 0 %}

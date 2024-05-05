@@ -120,7 +120,7 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     
     def checkAnswer(self, answer):
         '''Strips punctuation and make lower case. Then compares the answer string to the point's text.'''
-        if self.blankFill and self.isRoot:
+        if self.blankFill: # and self.isRoot:
             return formatString(answer, self.punc) == formatString(self.answer(), self.punc)
         return formatString(answer, self.punc) == formatString(self.text, self.punc)
     
@@ -135,7 +135,7 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
         try:
             return str(self.text)[0: str(self.text).index(">|<")]
         except Exception as e:
-            print("Error: " + str(e))
+            # print("Error: " + str(e) + " : " + self.text)
             return self.text
     
     def answer(self):

@@ -106,9 +106,22 @@
             document.getElementById("form_parent").value = parent_type;
             document.getElementById("form_header").innerText = title;
             document.getElementById("form_submit").innerText = title;
+            document.getElementById("form_submit").setAttribute("onclick", "return checkBlankFill();");
             document.getElementById("form_div").style.display = "block";
             document.getElementById("text").focus()
         }
+    }
+
+    function checkBlankFill() {
+        // When user submits form, check if '>|<' is included, but blank fill is not selected, and alert accordingly.
+        if (document.getElementById("text").value.includes(">|<") && document.getElementById("blank_fill_no").checked) {
+            if (confirm("Warning: You have included the blank-fill character, but not enabled blank fill.")) {
+                return true;
+            } else { 
+                return false;
+            }
+        }
+
     }
 
 </script>
