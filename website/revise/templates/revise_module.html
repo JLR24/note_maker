@@ -6,7 +6,7 @@
 
     <h1>Revise Module "<i>{{ module.name }}</i>":</h1><br>
 
-    <p>Correct Answers: {{ count }}</p>
+    <p>Correct Answers: {{ count }} out of <span id="q_count"></span></p>
 
     <form method="POST" autocomplete="off">
         <input type="hidden" name="module" value="{{ module.id }}">
@@ -112,7 +112,7 @@
             if (document.getElementById("start").value == "0") {
                 document.getElementById("start").value = Date.now();
             }
-
+            displayCount();
             setTimeout(updateDisplay, 1000);
         }
 
@@ -140,6 +140,10 @@
             if (minutes < 1) return seconds + s;
             if (hours < 1) return minutes + m + ", " + seconds + s;
             return hours + ":" + minutes + "." + seconds;
+        }
+
+        function displayCount() {
+            document.getElementById("q_count").innerText = document.getElementsByTagName("input").length - 4;
         }
     </script>
 

@@ -30,3 +30,4 @@ if __name__ == "__main__":
 # - Ability to type code in a textbox.
 # - The ability to edit a point (add extra button to display with pen icon, brings up form).
 # - Point ordering
+# - Add the option for adding parent node (change arrows).
