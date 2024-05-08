@@ -10,10 +10,20 @@
             <textarea name="text" id="text" class="form-control" placeholder="Enter the text..." required autofocus></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="text">Hint</label>
-            <input type="text" name="hint" id="hint" class="form-control" placeholder="Enter an optional hint...">
-        </div>
+        <table style="width: 100%">
+            <td style="width: 80%">
+                <div class="form-group">
+                    <label for="hint">Hint</label>
+                    <input type="text" name="hint" id="hint" class="form-control" placeholder="Enter an optional hint...">
+                </div>
+            </td>
+            <td style="width: 20%">
+                <div class="form-group">
+                    <label for="leniency">Leniency</label>
+                    <input type="number" name="leniency" id="leniency" class="form-control" placeholder="Enter leniency..." min="10" max="100" value="90">
+                </div>
+            </td>
+        </table>
        
         <div class="form-group" style="padding: 0px 15px;" style="display: flex;">
             <table style="width: 100%">
@@ -37,7 +47,7 @@
         <div class="form-group" style="padding: 0px 15px;">
             <table style="width: 100%;">
                 <td style="width: 50%;">
-                    <label style="padding-right: 15px;">Should punctuation be examined? </label>
+                    <label style="padding-right: 15px;">Examine answer punctuation? </label>
                     <input type="radio" name="punctuation" value="No" checked id="punctuation_no">
                     <label for="punctuation_no" style="padding-right: 15px;">No</label>
                     <input type="radio" name="punctuation" value="Yes" id="punctuation_yes">
@@ -52,9 +62,20 @@
                 </td>
             </table>
         </div>
-        <div style="display: flex;">
+        <div style="display: flex;" id="add_span">
             <button class="btn btn-outline-danger" type="button" style="flex-grow: 1;" onclick="hideForm('add');">Exit Form</button>
-            <button class="btn btn-outline-success" style="flex-grow: 1;" id="form_submit">PENDING</button>
+            <button class="btn btn-outline-success" style="flex-grow: 1;" id="form_submit" name="form_submits">PENDING</button>
+        </div>
+        <div id="edit_span">
+            <table style="width: 100%">
+                <td style="width: 25%;"><button class="btn btn-outline-danger" type="button" onclick="hideForm('add');" style="width: 100%;">Exit Form</button></td>
+                <td style="width: 25%;"><button class="btn btn-outline-warning" style="width: 100%;" name="Delete">Delete Point</button></td>
+                <td style="width: 25%;">
+                    <button class="btn btn-outline-secondary" style="width: 100%;" name="Disable" id="disable_btn">Disable Point</button>
+                    <button class="btn btn-outline-primary" style="width: 100%; display: none;" name="Enable" id="enable_btn">Enable Point</button>
+                </td>
+                <td style="width: 25%;"><button class="btn btn-outline-success" id="form_submit" name="form_submits" style="width: 100%;">PENDING</button></td>
+            </table>
         </div>
     </form>
 </div>
@@ -71,7 +92,7 @@
             This action is <b>irreversible</b> and will delete all of this node's children.
         </p>
 
-        <div style="display: flex">
+        <div style="display: inline">
             <button class="btn btn-outline-danger" type="button" style="flex-grow: 1;" onclick="hideForm('delete');">Exit Form</button>
             <button class="btn btn-outline-primary" style="flex-grow: 1;" id="form_submit">Delete Node</button>
         </div>
@@ -92,9 +113,24 @@
             document.getElementById("form_div").style.display = "none";
         // else
             document.getElementById("delete_form").style.display = "none";
+
+            document.getElementById("edit_span").style.display = "none";
+            document.getElementById("add_span").style.display = "flex";
+
+            document.getElementById("enable_btn").style.display = "none";
+            document.getElementById("disable_btn").style.display = "inline";
+        
+        // Reset all input fields:
+        document.getElementById("text").value = "";
+        document.getElementById("hint").value = "";
+        document.getElementById("leniency").value = 90;
+        document.getElementById("blank_fill_no").checked = true;
+        document.getElementById("numeric_no").checked = true;
+        document.getElementById("punctuation_no").checked = true;
+        document.getElementById("code_no").checked = true;
     }
 
-    function showForm(id, title, parent_type) {
+    function showForm(id, title, parent_type, point=null) {
 
         if (title == "Delete") {
             document.getElementById("del_form_id").value = id;
@@ -105,10 +141,42 @@
             document.getElementById("form_title").value = title;
             document.getElementById("form_parent").value = parent_type;
             document.getElementById("form_header").innerText = title;
-            document.getElementById("form_submit").innerText = title;
-            document.getElementById("form_submit").setAttribute("onclick", "return checkBlankFill();");
+
+            for (let x of document.getElementsByName("form_submits")) {
+                x.innerText = title;
+                x.setAttribute("onclick", "return checkBlankFill();");
+            }
+            
+            // document.getElementById("form_submit").innerText = title;
+            // document.getElementById("form_submit").setAttribute("onclick", "return checkBlankFill();");
+            if (title == "Edit") {
+                // Fill in existing details
+                document.getElementById("text").value = point.text;
+                document.getElementById("hint").value = point.hint;
+                document.getElementById("leniency").value = point.leniency;
+                if (point.blankFill == "True")
+                    document.getElementById("blank_fill_yes").checked = true;
+                if (point.numeric == "True")
+                    document.getElementById("numeric_yes").checked = true;
+                if (point.punc == "True")
+                    document.getElementById("punctuation_yes").checked = true;
+                if (point.code == "True")
+                    document.getElementById("code_yes").checked = true;
+                // Add extra "disabled" and "delete" options.
+                document.getElementById("edit_span").style.display = "block";
+                document.getElementById("add_span").style.display = "none";
+
+                // Show either enable or disable button:
+                if (point.disabled == "True") {
+                    document.getElementById("enable_btn").style.display = "inline";
+                    document.getElementById("disable_btn").style.display = "none";
+                }
+            } else {
+                document.getElementById("edit_span").style.display = "none";
+                document.getElementById("add_span").style.display = "flex";
+            }
             document.getElementById("form_div").style.display = "block";
-            document.getElementById("text").focus()
+            document.getElementById("text").focus();
         }
     }
 

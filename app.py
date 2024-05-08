@@ -30,3 +30,8 @@ if __name__ == "__main__":
 # - The ability to edit a point (add extra button to display with pen icon, brings up form).
 # - Point ordering
 # - Add the option for adding parent node (change arrows).
+# - Add ability to "hide" or "disable" certain nodes:
+#   - Will not show in revision section.
+#   - Greyed out in creation tree.
+# - Fix spacing for points (Children all equidistant, sibling of parent has more spacing).
+# - Fix empty answers ("Internet Protocols", for example).

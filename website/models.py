@@ -85,6 +85,7 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     punc = db.Column(db.Boolean, default=True) # Remove punctuation when checking answers.
     leniency = db.Column(db.Integer, default=90) # Match percentage between given answer and correct answer.
     code = db.Column(db.Boolean, default=False) # Question requires code answer. Punc is overriden to False and a textarea is displayed instead of a standard 1-line input.
+    disabled = db.Column(db.Boolean, default=False)
     successes = db.Column(db.Integer, default=0)
     failures = db.Column(db.Integer, default=0)
     last_answered = db.Column(db.DateTime(timezone=True))
@@ -144,6 +145,34 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
             return str(self.text)[str(self.text).index(">|<") + 4 : len(self.text)]
         except:
             return ""
+        
+    def isDisabled(self):
+        '''Returns True if this node, or any parent node is marked as disabled, False otherwise.'''
+        if self.disabled:
+            return True
+        if not self.isRoot:
+            return self.getParent().isDisabled()
+        return False
+    
+    def serialise(self):
+        '''Returns a dictionary of all attributes for the Point object.'''
+        return {
+            "id": self.id,
+            "text": self.text,
+            "blankFill": str(self.blankFill),
+            "hint": self.hint,
+            "parent": self.parent,
+            "isRoot": str(self.isRoot),
+            "numeric": str(self.numeric),
+            "punc": str(self.punc),
+            "leniency": self.leniency,
+            "code": str(self.code),
+            "disabled": str(self.disabled),
+            "successes": self.successes,
+            "failures": self.failures,
+            "last_answered": str(self.last_answered),
+            "order": str(self.order)
+        }
 
     
 def formatString(text, punc=True):

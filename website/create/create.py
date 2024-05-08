@@ -86,24 +86,26 @@ def deletePoint(point):
 @login_required
 def edit_tree():
     '''This method handles the form submission when the user edits the tree (add child/sibling, delete node).'''
-    if request.form.get("title") == "Delete":
-        print("Get heading or node, recursively delete its children, delete the node, flash and redirect.")
+    if "Delete" in request.form or "Disable" in request.form or "Enable" in request.form:
         if request.form.get("parent_type") == "point":
             p = Point.query.get(int(request.form.get("id")))
             anchor = p.getHeading().id
         else:
             p = Heading.query.get(int(request.form.get("id")))
             anchor = p.id
-        print(request.form.get("parent_type"))
         if not p:
             flash("Invalid details!", category="error")
             return redirect(url_for("create.index"))
         course = p.getCourse()
         heading = p.getHeading()
         module = heading.getModule()
-        deletePoint(p)
+        if "Delete" in request.form:
+            deletePoint(p)
+        elif "Disable" in request.form:
+            p.disabled = True
+        else:
+            p.disabled = False
         db.session.commit()
-
     elif request.form.get("title") == "Add Child":
         # Check if this is a root or not.
 
