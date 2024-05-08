@@ -27,7 +27,6 @@ if __name__ == "__main__":
 # - When revising, can choose one of three modes: full text, 
 #       random points (+count), or random blank-fill (+count).
 # - Ability to type code in a textbox.
-# - The ability to edit a point (add extra button to display with pen icon, brings up form).
 # - Point ordering
 # - Add the option for adding parent node (change arrows).
 # - Add ability to "hide" or "disable" certain nodes:

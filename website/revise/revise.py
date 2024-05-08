@@ -1,6 +1,6 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for
 from flask_login import current_user, login_required
-from ..models import db, Module, Point
+from ..models import db, Module, Point, Heading
 
 revise = Blueprint("revise", __name__, template_folder="templates", static_folder="static")
 
@@ -70,7 +70,8 @@ def checkModuleAnswers(module):
 
 def checkChildren(results, count, point):
     for item in point._getChildren():
-        results, count = checkChildren(results, count, item)
+        if type(item) == Heading or (type(item) == Point and not item.isDisabled()):
+            results, count = checkChildren(results, count, item)
     if (type(point) == Point and not point.isRoot) or (type(point) == Point and point.blankFill and point.isRoot):
         results[point.id] = request.form.get(f"{point.id}")
     if type(point) == Point and point.checkAnswer(request.form.get(f"{point.id}")):

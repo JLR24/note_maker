@@ -87,12 +87,14 @@ def deletePoint(point):
 def edit_tree():
     '''This method handles the form submission when the user edits the tree (add child/sibling, delete node).'''
     if "Delete" in request.form or "Disable" in request.form or "Enable" in request.form:
-        if request.form.get("parent_type") == "point":
-            p = Point.query.get(int(request.form.get("id")))
-            anchor = p.getHeading().id
-        else:
-            p = Heading.query.get(int(request.form.get("id")))
-            anchor = p.id
+        # if request.form.get("parent_type") == "point":
+        #     p = Point.query.get(int(request.form.get("id")))
+        #     anchor = p.getHeading().id
+        # else:
+        #     p = Heading.query.get(int(request.form.get("id")))
+        #     anchor = p.id
+        p = Point.query.get(int(request.form.get("id")))
+        anchor=p.id
         if not p:
             flash("Invalid details!", category="error")
             return redirect(url_for("create.index"))
