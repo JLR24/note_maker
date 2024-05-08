@@ -82,7 +82,7 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     parent = db.Column(db.Integer) # If isRoot==True, then this points to a heading. Otherwise to another point.
     isRoot = db.Column(db.Boolean) # Can this be a starting point for a question (list the points below this one)?
     numeric = db.Column(db.Boolean, default=False) # If numeric, use <ol>, otherwise use <ul>
-    punc = db.Column(db.Boolean, default=True) # Remove punctuation when checking answers.
+    punc = db.Column(db.Boolean, default=False) # Check punctuation when marking answers.
     leniency = db.Column(db.Integer, default=90) # Match percentage between given answer and correct answer.
     code = db.Column(db.Boolean, default=False) # Question requires code answer. Punc is overriden to False and a textarea is displayed instead of a standard 1-line input.
     disabled = db.Column(db.Boolean, default=False)

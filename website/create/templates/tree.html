@@ -22,7 +22,8 @@
                                 <span style="display: none" id="s_{{node.id}}">
                                     <button class="btn tree-btn" style="color: #007bff;" title="Add Child" onclick="showForm('{{ node.id }}', 'Add Child', 'point');">&#8626;</button>
                                     <button class="btn tree-btn" style="color: limegreen;" title="Add Sibling" onclick="showForm('{{ node.id }}', 'Add Sibling', 'heading');">&plus;</button>
-                                    <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button>
+                                    <!-- <button class="btn tree-btn" style="color: red;" title="Delete" onclick="showForm('{{ node.id }}', 'Delete', 'point');">&times;</button> -->
+                                    <button class="btn tree-btn" style="color: orange;" title="Edit" onclick="showForm('{{ node.id }}', 'Edit', 'heading', {{ node.serialise() }})">&#9660;</button>
                                 </span>
                             </li>
 

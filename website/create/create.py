@@ -106,6 +106,38 @@ def edit_tree():
         else:
             p.disabled = False
         db.session.commit()
+    elif request.form.get("title") == "Edit":
+        p = Point.query.get(int(request.form.get("id")))
+        anchor=p.id
+        if not p:
+            flash("Invalid details!", category="error")
+            return redirect(url_for("create.index"))
+        course = p.getCourse()
+        heading = p.getHeading()
+        module = heading.getModule()
+
+        blankFill = True
+        if request.form.get("blank_fill") == "No":
+            blankFill = False
+        numeric = True
+        if request.form.get("numeric") == "No":
+            numeric = False
+        punc = True
+        if request.form.get("punctuation") == "No":
+            punc = False
+        code = True
+        if request.form.get("code") == "No":
+            code = False
+
+        p.text = request.form.get("text")
+        p.blankFill = blankFill
+        p.hint = request.form.get("hint")
+        p.numeric = numeric
+        p.punc = punc
+        p.code = code
+        p.leniency = int(request.form.get("leniency"))
+        db.session.commit()
+
     elif request.form.get("title") == "Add Child":
         # Check if this is a root or not.
 
@@ -141,7 +173,8 @@ def edit_tree():
             isRoot = isRoot,
             numeric = numeric,
             punc = punc,
-            code = code
+            code = code,
+            leniency = int(request.form.get("leniency"))
         )
         db.session.add(point)
         db.session.commit()
@@ -162,6 +195,12 @@ def edit_tree():
         numeric = True
         if request.form.get("numeric") == "No":
             numeric = False
+        punc = True
+        if request.form.get("punctuation") == "No":
+            punc = False
+        code = True
+        if request.form.get("code") == "No":
+            code = False
 
         point = Point(
             text = request.form.get("text"),
@@ -169,7 +208,10 @@ def edit_tree():
             hint = request.form.get("hint"),
             parent = sibling.parent,
             isRoot = sibling.isRoot,
-            numeric = numeric
+            numeric = numeric,
+            punc = punc,
+            code = code,
+            leniency = int(request.form.get("leniency"))
         )
         db.session.add(point)
         db.session.commit()
