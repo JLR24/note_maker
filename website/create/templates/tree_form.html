@@ -1,6 +1,6 @@
 <div class="tree-form-div" id="form_div" style="display: none;">
     <h4 id="form_header">PENDING</h4>
-    <form method="POST" class="tree-form" action="{{ url_for('create.edit_tree') }}">
+    <form method="POST" class="tree-form" action="{{ url_for('create.edit_tree') }}" id="tree_form_element">
         <input type="hidden" id="form_id" name="id">
         <input type="hidden" id="form_title" name="title">
         <input type="hidden" id="form_parent" name="parent_type">
@@ -105,6 +105,13 @@
     document.body.addEventListener("keydown", function(e) {
         if (e.key == "Escape" && (document.getElementById("form_div").style.display == "block" || document.getElementById("delete_form").style.display == "none")) {
             hideForm();
+        }
+    })
+
+    document.getElementById("text").addEventListener("keydown", function(e) {
+        if (e.key == "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementById("tree_form_element").submit();
         }
     })
 
