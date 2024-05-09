@@ -29,8 +29,8 @@ if __name__ == "__main__":
 # - Ability to type code in a textbox.
 # - Point ordering
 # - Add the option for adding parent node (change arrows).
-# - Add ability to "hide" or "disable" certain nodes:
-#   - Will not show in revision section.
-#   - Greyed out in creation tree.
 # - Fix spacing for points (Children all equidistant, sibling of parent has more spacing).
 # - Fix empty answers ("Internet Protocols", for example).
+# - When "enter" is clicked on create tree, open form to add new SIBLING to last node (maybe last added?).
+# - When "tab" is clicked on create tree, open form to add new CHILD to last node (maybe last added?).
+# - Allow add child/sibling form to be submitted on "enter" click.

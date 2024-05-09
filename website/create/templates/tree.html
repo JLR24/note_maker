@@ -8,7 +8,7 @@
 
     {% for module in course.getModules() %}
         
-        <h2 class="tree-module" onclick="toggleMenu('m_{{module.id}}');">{{ module.code }}:</h2><small class="text-muted">{{ module.name }}</small><br><br>
+        <h2 class="tree-module" onclick="toggleMenu('m_{{module.id}}');">{{ module.code }}:</h2><small class="text-muted">{{ module.name }} <a href="/revise/module/{{ module.code }}" style="font-style: italic; margin-left: 15px;">Revise</a></small><br><br>
         <div id="m_{{module.id}}" {% if m != module.id | string %} style="display: none;" {% endif %}>
             {% for heading in module.getHeadings() %}
 

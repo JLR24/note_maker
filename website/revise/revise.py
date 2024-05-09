@@ -11,16 +11,16 @@ def index():
     return render_template("revise.html", user=current_user)
 
 
-@revise.route("/module/<int:m_id>", methods=["GET", "POST"])
+@revise.route("/module/<string:m_code>", methods=["GET", "POST"])
 @login_required
-def module(m_id):
+def module(m_code):
     # Display creation tree, but with all sub-points as text fields.
     # On submission, check each text field (unique ID) with answer.
     # Extension is to allow for override?
     # Store answers as dictionary and pass into template (so that the user can keep trying until correct).
         # There is no need to store this in the session, since it can be redefined whenever the user presses submit.
     # Upon completion, show number of attempts, their score each time, and the total time taken.
-    module = Module.query.get(m_id)
+    module = Module.query.filter_by(code=m_code).first()
     if not module:
         flash("Invalid details!", category="error")
         return redirect(url_for("revise.index"))
