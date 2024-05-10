@@ -2,6 +2,7 @@ from . import db
 from flask_login import UserMixin
 import string
 from sqlalchemy.sql import func
+from fuzzywuzzy import fuzz
 
 
 class User(db.Model, UserMixin):
@@ -121,9 +122,11 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     
     def checkAnswer(self, answer):
         '''Strips punctuation and make lower case. Then compares the answer string to the point's text.'''
-        if self.blankFill: # and self.isRoot:
-            return formatString(answer, self.punc) == formatString(self.answer(), self.punc)
-        return formatString(answer, self.punc) == formatString(self.text, self.punc)
+        return self._compareAnswers(formatString(answer, self.punc))
+    
+    def _compareAnswers(self, userAnswer):
+        '''Returns True if the user's answer is within the accepted range of the point's answer, False otherwise.'''
+        return fuzz.ratio(userAnswer, formatString(self.answer(), self.punc)) >= self.leniency
     
     def format(self):
         '''If the point is blank-fill capable, it returns the default string.'''
@@ -141,6 +144,8 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
     
     def answer(self):
         '''If the point is blank-fill capable, it returns just the answer string'''
+        if not self.blankFill:
+            return self.text
         try:
             return str(self.text)[str(self.text).index(">|<") + 4 : len(self.text)]
         except:
@@ -175,9 +180,10 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
         }
 
     
-def formatString(text, punc=True):
+def formatString(text, punc=False):
     '''Returns the given string in lower case w/o punctuation.'''
     # Remove puncuation. Source: https://stackoverflow.com/questions/265960/best-way-to-strip-punctuation-from-a-string (11/03/2024, from CS133 revision project) and https://stackoverflow.com/questions/8270092/remove-all-whitespace-in-a-string (04/05/2024).
-    if punc:
+    if not punc:
+        # Remove puncutiaton, since it isn't being examined.
         return " ".join(str(text).lower().split()).translate(str.maketrans('', '', string.punctuation))
     return " ".join(str(text).lower().split())

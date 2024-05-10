@@ -33,7 +33,8 @@ def module(m_code):
         if count == len(results):
             time = request.form.get("time")
             module.attempts += 1
-            if not module.time or module.time < time:
+            # if not module.time or module.time < time:
+            if not module.time or isBetterTime(module, time):
                 module.time = time
             db.session.commit()
             flash(f"All correct! Completed in: {time}.", category="success")
@@ -58,9 +59,12 @@ def isBetterTime(module, js_time):
         return False
     
 def getTimeStringAsInt(time_string):
-    '''Takes a string of the form 'x minute(s), y second(s)' and returns (x * 60 + y).'''
+    '''Takes a string of the form 'y minute(s), z second(s)' or 'x hour(s), y minute(s), z second(s)' and returns (y * 60 + z) or (x * 3600 + y * 60 + z) respectively.'''
     time_array = time_string.split(" ")
-    return int(time_array[0]) * 60 + int(time_array[2])
+    if len(time_array) == 4:
+        return int(time_array[0]) * 60 + int(time_array[2])
+    else:
+        return int(time_array[0]) * 3600 + int(time_array[2]) * 60 + int(time_array[4])
 
 
 def checkModuleAnswers(module):
@@ -73,7 +77,9 @@ def checkChildren(results, count, point):
         if type(item) == Heading or (type(item) == Point and not item.isDisabled()):
             results, count = checkChildren(results, count, item)
     if (type(point) == Point and not point.isRoot) or (type(point) == Point and point.blankFill and point.isRoot):
-        results[point.id] = request.form.get(f"{point.id}")
+        if not (point.blankFill and point.answer() == ""):
+            results[point.id] = request.form.get(f"{point.id}")
     if type(point) == Point and point.checkAnswer(request.form.get(f"{point.id}")):
-        count += 1
+        if not (point.blankFill and point.answer() == ""):
+            count += 1
     return (results, count)

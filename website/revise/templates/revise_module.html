@@ -54,23 +54,25 @@
                             {% if item.blankFill %}
                                 <div style="display: flex;">
                                 {{ item.question() }}
-                                    <input type="text" name="{{ item.id }}" 
-                                        {% if results[item.id] %} 
-                                            value="{{ results[item.id] }}" 
-                                            {% if item.checkAnswer(results[item.id]) %}
-                                                class = "revise-blank-input revise-input-correct"
-                                                tabindex="-1"
-                                            {% else %}
-                                                class = "revise-blank-input revise-input-incorrect"
+                                    {% if item.answer() != "" %}
+                                        <input type="text" name="{{ item.id }}" 
+                                            {% if results[item.id] %} 
+                                                value="{{ results[item.id] }}" 
+                                                {% if item.checkAnswer(results[item.id]) %}
+                                                    class = "revise-blank-input revise-input-correct"
+                                                    tabindex="-1"
+                                                {% else %}
+                                                    class = "revise-blank-input revise-input-incorrect"
+                                                {% endif %}
+                                            {% else %} 
+                                                class="revise-blank-input" 
                                             {% endif %}
-                                        {% else %} 
-                                            class="revise-blank-input" 
-                                        {% endif %}
-                                        {% if item.hint %}
-                                            placeholder="Hint: {{ item.hint }}"
-                                        {% endif %}
-                                    autocomplete="off"
-                                    >
+                                            {% if item.hint %}
+                                                placeholder="Hint: {{ item.hint }}"
+                                            {% endif %}
+                                        autocomplete="off"
+                                        >
+                                    {% endif %}
                                 </div>
                             {% else %}
                                 <input type="text" name="{{ item.id }}"
@@ -126,7 +128,7 @@
         {% endfor %}
         <input type="hidden" name="time" id="time" value="{{ start }}">
         <input type="hidden" name="start" id="start" value="{{ start }}">
-        <a href="/revise/module/{{ module.id }}" class="btn btn-outline-danger">Restart</a>
+        <a href="/revise/module/{{ module.code }}" class="btn btn-outline-danger">Restart</a>
         <input type="submit" value="Check Answers" class="btn btn-outline-success">
         <span id="timer" class="timer">-- seconds</span>
     </form>
@@ -152,7 +154,7 @@
 
             let seconds = Math.floor((time / 1000) % 60);
             let minutes = Math.floor((time / (1000 * 60)) % 60);
-            let hours = Math.floor((minutes / (1000 * 60 * 60)) % 24);
+            let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
 
             if (seconds == 1) s = " second";
             else s = " seconds";
@@ -163,7 +165,8 @@
 
             if (minutes < 1) return seconds + s;
             if (hours < 1) return minutes + m + ", " + seconds + s;
-            return hours + ":" + minutes + "." + seconds;
+            // return hours + " hours, " + minutes + " minutes, and " + seconds + " seconds";
+            return hours + h  + ", " + minutes + m + ", " + seconds + s;
         }
 
         function displayCount() {
