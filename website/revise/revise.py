@@ -54,8 +54,8 @@ def isBetterTime(module, js_time):
         js_int = getTimeStringAsInt(js_time)
 
         if module_int >= js_int:
-            return False
-        return True
+            return True
+        return False
     except:
         print("Error in <revise.isBetterTime()>: module: " + module.id + "(" + module.time + ") jsTime: " + js_time)
         return False
