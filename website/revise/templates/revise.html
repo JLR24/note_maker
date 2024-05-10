@@ -6,4 +6,18 @@
 
     <h1>Revise</h1><br>
 
+    {% for course in current_user.getCourses() %}
+        <h2>{{ course.name }}</h2>
+        <form method="POST">
+            <label for="code">Module: </label>
+            <select name="code" id="code">
+                {% for mod in course.getModules() %}
+                    <option value="{{ mod.code }}">{{ mod.code }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Select" class="btn btn-outline-success">
+        </form>
+        <br><hr><br>
+    {% endfor %}
+
 {% endblock %}

@@ -5,9 +5,11 @@ from ..models import db, Module, Point, Heading
 revise = Blueprint("revise", __name__, template_folder="templates", static_folder="static")
 
 
-@revise.route("/")
+@revise.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    if request.method == "POST":
+        return redirect(url_for("revise.module", m_code=request.form.get("code")))
     return render_template("revise.html", user=current_user)
 
 
