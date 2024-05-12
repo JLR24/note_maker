@@ -69,7 +69,7 @@
         <div id="edit_span">
             <table style="width: 100%">
                 <td style="width: 25%;"><button class="btn btn-outline-danger" type="button" onclick="hideForm('add');" style="width: 100%;">Exit Form</button></td>
-                <td style="width: 25%;"><button class="btn btn-outline-warning" style="width: 100%;" name="Delete">Delete Point</button></td>
+                <td style="width: 25%;"><button class="btn btn-outline-warning" style="width: 100%;" name="Delete" onclick="if (confirm('Are you sure you want to delete this node and any child nodes?')) return true; else return false;">Delete Point</button></td>
                 <td style="width: 25%;">
                     <button class="btn btn-outline-secondary" style="width: 100%;" name="Disable" id="disable_btn">Disable Point</button>
                     <button class="btn btn-outline-primary" style="width: 100%; display: none;" name="Enable" id="enable_btn">Enable Point</button>
