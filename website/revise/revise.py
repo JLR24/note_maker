@@ -9,7 +9,10 @@ revise = Blueprint("revise", __name__, template_folder="templates", static_folde
 @login_required
 def index():
     if request.method == "POST":
-        return redirect(url_for("revise.module", m_code=request.form.get("code")))
+        m_code = request.form.get("code")
+        if request.form.get("headings") == "All":
+            return redirect(url_for("revise.module", m_code=m_code))
+        return redirect(url_for("revise.heading", h_id=request.form.get("headings:" + m_code)))
     return render_template("revise.html", user=current_user)
 
 
@@ -44,6 +47,30 @@ def module(m_code):
     return render_template("revise_module.html", module=module, user=current_user, results=results, count=count, start=start)
 
 # Similar thing as above for headings.
+
+@revise.route("/heading/<int:h_id>", methods=["GET", "POST"])
+@login_required
+def heading(h_id):
+    print("RUNNING")
+    h = Heading.query.filter_by(id=h_id).first()
+    if not h:
+        flash("Invalid details!", category="error")
+        return redirect(url_for("revise.index"))
+    results = dict()
+    count = 0
+    start = 0
+    if request.method == "POST":
+        start = request.form.get("start")
+        results, count = checkModuleAnswers(h)
+        if count == len(results):
+            time = request.form.get("time")
+            h.attempts += 1
+            if not h.time or isBetterTime(h, time):
+                h.time = time
+            db.session.commit()
+            flash(f"All correct! Completed in: {time}.", category="success")
+            return redirect(url_for("revise.index"))
+    return render_template("revise_heading.html", heading=h, user=current_user, results=results, count=count, start=start)
 
 # And then random points within a course and module (for blank fill).
 

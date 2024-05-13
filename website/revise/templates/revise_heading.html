@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %} Revise Heading {% endblock %}
+
+{% block content %}
+
+    <h1>Revise Heading "<i>{{ heading.text }}</i>":</h1><br>
+
+    <p>Correct Answers: {{ count }} out of <span id="q_count"></span></p>
+
+    <form method="POST" autocomplete="off">
+        <input type="hidden" name="heading" value="{{ heading.id }}">
+            <ul>
+                {% for node in heading.getPoints() %}
+                    {% if not node.disabled %}
+                    <li>
+                        <div style="display: flex;">
+                        {{ node.question() }}
+                        {% if node.blankFill %}
+                            <input type="text" name="{{ node.id }}" {% if results[node.id] %} 
+                                value="{{ results[node.id] }}" 
+                                {% if node.checkAnswer(results[node.id]) %}
+                                    class = "revise-blank-input revise-input-correct"
+                                    tabindex="-1"
+                                {% else %}
+                                    class = "revise-blank-input revise-input-incorrect"
+                                {% endif %}
+                            {% else %} 
+                                class="revise-blank-input" 
+                            {% endif %}
+                            {% if node.hint %}
+                                placeholder="Hint: {{ node.hint }}"
+                            {% endif %}
+                            autocomplete="off"
+                            >
+                        {% endif %}
+                        </div>
+                    </li>
+                    {% endif %}
+
+                    {% if node.numeric %}
+                        <ol>
+                    {% else %}
+                        <ul>
+                    {% endif %}
+
+                    {%- for item in node.getChildren() recursive %}
+                        {% if not item.isDisabled() %}
+                        <li>
+                            {% if item.blankFill %}
+                                <div style="display: flex;">
+                                {{ item.question() }}
+                                    {% if item.answer() != "" %}
+                                        <input type="text" name="{{ item.id }}" 
+                                            {% if results[item.id] %} 
+                                                value="{{ results[item.id] }}" 
+                                                {% if item.checkAnswer(results[item.id]) %}
+                                                    class = "revise-blank-input revise-input-correct"
+                                                    tabindex="-1"
+                                                {% else %}
+                                                    class = "revise-blank-input revise-input-incorrect"
+                                                {% endif %}
+                                            {% else %} 
+                                                class="revise-blank-input" 
+                                            {% endif %}
+                                            {% if item.hint %}
+                                                placeholder="Hint: {{ item.hint }}"
+                                            {% endif %}
+                                        autocomplete="off"
+                                        >
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <input type="text" name="{{ item.id }}"
+                                    {% if results[item.id] %} 
+                                        value="{{ results[item.id] }}" 
+                                        {% if item.checkAnswer(results[item.id]) %}
+                                            class = "revise-input revise-input-correct"
+                                            tabindex="-1"
+                                        {% else %}
+                                            class = "revise-input revise-input-incorrect"
+                                        {% endif %}
+                                    {% else %} 
+                                        class="revise-input" 
+                                    {% endif %}
+                                    {% if item.hint %}
+                                        placeholder="Hint: {{ item.hint }}"
+                                    {% endif %}
+                                    autocomplete="off"
+                                >
+                            {% endif %}
+                        </li>
+
+                        {% if item.getChildren() | length > 0 %}
+
+                            {% if item.numeric %}
+                                <ol>
+                            {% else %}
+                                <ul>
+                            {% endif %}
+
+                                {{ loop(item.getChildren()) }}
+
+                            {% if item.numeric %}
+                                </ol>
+                            {% else %}
+                                </ul>
+                            {% endif %}
+
+                        {% endif %}
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if node.numeric %}
+                        </ol>
+                    {% else %}
+                        </ul>
+                    {% endif %}
+
+                {% endfor %}
+            </ul>
+        <input type="hidden" name="time" id="time" value="{{ start }}">
+        <input type="hidden" name="start" id="start" value="{{ start }}">
+        <a href="/revise/heading/{{ heading.id }}" class="btn btn-outline-danger">Restart</a>
+        <input type="submit" value="Check Answers" class="btn btn-outline-success">
+        <span id="timer" class="timer">-- seconds</span>
+    </form>
+
+    <script>
+        window.onload = function() {
+            if (document.getElementById("start").value == "0") {
+                document.getElementById("start").value = Date.now();
+            }
+            displayCount();
+            setTimeout(updateDisplay, 1000);
+        }
+
+        function updateDisplay() {
+            let time = formatTime();
+            document.getElementById("timer").innerText = time;
+            document.getElementById("time").value = time;
+            setTimeout(updateDisplay, 1000);
+        }
+
+        function formatTime() { 
+            let time = parseInt(Date.now() - document.getElementById("start").value);  
+
+            let seconds = Math.floor((time / 1000) % 60);
+            let minutes = Math.floor((time / (1000 * 60)) % 60);
+            let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+
+            if (seconds == 1) s = " second";
+            else s = " seconds";
+            if (minutes == 1) m = " minute";
+            else m = " minutes";
+            if (hours == 1) h = " hour";
+            else h = " hours";
+
+            if (minutes < 1) return seconds + s;
+            if (hours < 1) return minutes + m + ", " + seconds + s;
+            // return hours + " hours, " + minutes + " minutes, and " + seconds + " seconds";
+            return hours + h  + ", " + minutes + m + ", " + seconds + s;
+        }
+
+        function displayCount() {
+            document.getElementById("q_count").innerText = document.getElementsByTagName("input").length - 4;
+        }
+    </script>
+
+{% endblock %}

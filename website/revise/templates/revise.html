@@ -9,15 +9,36 @@
     {% for course in current_user.getCourses() %}
         <h2>{{ course.name }}</h2>
         <form method="POST">
-            <label for="code">Module: </label>
-            <select name="code" id="code">
+            <label for="code:{{ course.id }}">Module: </label>
+            <select name="code" id="code:{{ course.id }}" onchange="loadHeadings(this.id)">
                 {% for mod in course.getModules() %}
                     <option value="{{ mod.code }}">{{ mod.code }}</option>
                 {% endfor %}
             </select>
+            {% for module in course.getModules() %}
+                <select class="headings:{{ course.id }}" name="headings:{{ module.code }}" id="headings:{{ module.code }}" {% if loop.index != 1 %} style="display: none;" {% endif %}>
+                    <option value="All" selected>All</option>
+                    {% for heading in module.getHeadings() %}
+                        <option value="{{ heading.id }}">{{ heading.text }}</option>
+                    {% endfor %}
+                </select>
+            {% endfor %}
             <input type="submit" value="Select" class="btn btn-outline-success">
         </form>
         <br><hr><br>
     {% endfor %}
+
+    <script>
+        function loadHeadings(htmlID) {
+            let courseID = htmlID.split(":")[1];
+            // Hide all select inputs with class name "headings:<course_id>"
+            for (let select of document.getElementsByClassName("headings:" + courseID)) {
+                select.style.display = "none";
+            }
+            // Show correct select input
+            let moduleCode = document.getElementById(htmlID).value;
+            document.getElementById("headings:" + moduleCode).style.display = "inline";
+        }
+    </script>
 
 {% endblock %}
