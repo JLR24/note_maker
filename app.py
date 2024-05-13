@@ -29,6 +29,4 @@ if __name__ == "__main__":
 #   - When "enter" is clicked on create tree, open form to add new SIBLING to last node (maybe last added?).
 #   - When "tab" is clicked on create tree, open form to add new CHILD to last node (maybe last added?).
 #   - When either is pressed, get ID from URL (as anchor), or add from LAST open point, and if not open, either (nothing or open and add to end of last module).
-# - Move the exit form button to be an x at the top right.
 # - Pause timer and time override features.
-# - Revise headings (time and count to db).

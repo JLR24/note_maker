@@ -17,9 +17,9 @@
             </select>
             {% for module in course.getModules() %}
                 <select class="headings:{{ course.id }}" name="headings:{{ module.code }}" id="headings:{{ module.code }}" {% if loop.index != 1 %} style="display: none;" {% endif %}>
-                    <option value="All" selected>All</option>
+                    <option value="All" selected>All ({{ module.attempts }})</option>
                     {% for heading in module.getHeadings() %}
-                        <option value="{{ heading.id }}">{{ heading.text }}</option>
+                        <option value="{{ heading.id }}">{{ heading.text }} ({{ heading.attempts }})</option>
                     {% endfor %}
                 </select>
             {% endfor %}
