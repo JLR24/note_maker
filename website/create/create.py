@@ -44,7 +44,8 @@ def add_module():
     if request.method == "POST":
         module = Module(
             name = request.form.get("name"),
-            course = course.id
+            course = course.id,
+            code = request.form.get("code")
         )
         db.session.add(module)
         db.session.commit()

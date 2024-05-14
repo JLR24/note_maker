@@ -10,7 +10,7 @@ revise = Blueprint("revise", __name__, template_folder="templates", static_folde
 def index():
     if request.method == "POST":
         m_code = request.form.get("code")
-        if request.form.get("headings") == "All":
+        if request.form.get("headings:" + m_code) == "All":
             return redirect(url_for("revise.module", m_code=m_code))
         return redirect(url_for("revise.heading", h_id=request.form.get("headings:" + m_code)))
     return render_template("revise.html", user=current_user)
