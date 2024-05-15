@@ -89,11 +89,17 @@ def isBetterTime(module, js_time):
     
 def getTimeStringAsInt(time_string):
     '''Takes a string of the form 'y minute(s), z second(s)' or 'x hour(s), y minute(s), z second(s)' and returns (y * 60 + z) or (x * 3600 + y * 60 + z) respectively.'''
-    time_array = time_string.split(" ")
-    if len(time_array) == 4:
-        return int(time_array[0]) * 60 + int(time_array[2])
-    else:
-        return int(time_array[0]) * 3600 + int(time_array[2]) * 60 + int(time_array[4])
+    try:
+        time_array = time_string.split(" ")
+        if (len(time_array) == 2):
+            return int(time_array[0])
+        elif len(time_array) == 4:
+            return int(time_array[0]) * 60 + int(time_array[2])
+        else:
+            return int(time_array[0]) * 3600 + int(time_array[2]) * 60 + int(time_array[4])
+    except:
+        print("Error in <revise.getTimeStringAsInt()>: string: " + time_string)
+        return -1
 
 
 def checkModuleAnswers(module):
