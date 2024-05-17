@@ -30,3 +30,16 @@ if __name__ == "__main__":
 #   - When "tab" is clicked on create tree, open form to add new CHILD to last node (maybe last added?).
 #   - When either is pressed, get ID from URL (as anchor), or add from LAST open point, and if not open, either (nothing or open and add to end of last module).
 # - Pause timer and time override features.
+
+
+# UPDATES:
+# - Combine this code with previous note maker plans.
+# - Lecture note-making.
+# - Setting defitions in a glossary-type feature.
+# - Links between sections.
+# - Image insertion (with captions).
+# - Revision schedule (multiple times through learning content (with progressively smaller and smaller hints), 
+#       until eventually content is learned (counts hint increase and skip count)
+# - Include definitions page
+# - Includes "tell me about" pages, where the user is given a blank input and must
+#       write everything they remember about the given topic.
