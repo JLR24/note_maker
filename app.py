@@ -30,6 +30,7 @@ if __name__ == "__main__":
 #   - When "tab" is clicked on create tree, open form to add new CHILD to last node (maybe last added?).
 #   - When either is pressed, get ID from URL (as anchor), or add from LAST open point, and if not open, either (nothing or open and add to end of last module).
 # - Pause timer and time override features.
+# - Add "close" button at bottom of each heading (when open)
 
 
 # UPDATES:
@@ -43,3 +44,4 @@ if __name__ == "__main__":
 # - Include definitions page
 # - Includes "tell me about" pages, where the user is given a blank input and must
 #       write everything they remember about the given topic.
+# - Allow the insertion of images and tables (both with captions).
