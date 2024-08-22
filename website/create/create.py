@@ -1,4 +1,4 @@
-from flask import Blueprint, request, flash, render_template, redirect, url_for, session, send_file
+from flask import Blueprint, request, flash, render_template, redirect, url_for, session, send_file, send_from_directory, current_app
 from flask_login import current_user, login_required
 from ..models import db, Course, Module, Heading, Point
 from .static.export import export
@@ -240,15 +240,10 @@ def handleExport():
             flash("Invalid details", category="error")
             return redirect(url_for("create.tree"))
 
-        # file = tempfile.NamedTemporaryFile(mode="a+") # Source: EPQ, MH
-        # file.name = f"{heading.text}.json"
-        # json.dump(export(heading.getPoints()), file, ensure_ascii=False, indent=4)
-        # file.seek(0) # Move cursor to beginning?
-        # return send_file(file.name)
-        with tempfile.TemporaryDirectory() as tempDir: # Source: https://stackoverflow.com/questions/26541416/generate-temporary-file-names-without-creating-actual-file-in-python (22/08/2024).
-            with open(os.path.join(tempDir, f"{heading.text}.json"), "w") as f:
-                json.dump(export(heading.getPoints()), f, ensure_ascii=False, indent=4) # Source: https://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file (22/08/2024).
-                return send_file(f.name, as_attachment=True)
+        file = tempfile.NamedTemporaryFile(mode="a+") # Source: EPQ, MH
+        json.dump(export(heading.getPoints()), file, ensure_ascii=False, indent=4) # Source: https://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file (22/08/2024).
+        file.seek(0) # Move cursor to beginning?
+        return send_file(file.name, as_attachment=True, download_name=f"{heading.text}.json")
     try:
         return redirect(url_for("create.tree", id=heading.getCourse().id, h=heading.id))
     except:
