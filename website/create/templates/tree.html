@@ -14,6 +14,10 @@
 
                 <h3 class="tree-heading" onclick="toggleMenu('h_{{heading.id}}');">{{ heading.text }}:</h3>
                 <div id="h_{{heading.id}}" {% if h != heading.id | string %} style="display: none;" {% endif %}>
+                    <form method="POST" action="{{ url_for('create.handleExport') }}">
+                        <input type="hidden" name="id" value="{{ heading.id }}">
+                        <input type="submit" class="btn btn-outline-info" value="Export Heading">
+                    </form>
                     <ul>
                         {% for node in heading.getPoints() %}
 

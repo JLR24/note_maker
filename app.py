@@ -45,3 +45,5 @@ if __name__ == "__main__":
 # - Includes "tell me about" pages, where the user is given a blank input and must
 #       write everything they remember about the given topic.
 # - Allow the insertion of images and tables (both with captions).
+# Common conversions when checking (2 -> "two", for example)
+# Removing brackets? (Option to check or ignore?)

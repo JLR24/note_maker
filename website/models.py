@@ -59,6 +59,17 @@ class Heading(db.Model): # Example: Sorting Algorithms
     time = db.Column(db.String(128))
     order = db.Column(db.Integer, default=0)
 
+    # def getAllPoints(self):
+    #     '''This method returns an array of all points under the Heading object.'''
+    #     item = self
+    #     points = []
+    #     for i in item._getChildren():
+    #         points.append(i)
+
+    # def getChildrenOfPoint(self, point):
+
+
+
     def getPoints(self):
         '''Returns a list of the Heading's Point objects'''
         return Point.query.filter_by(isRoot=True, parent=self.id).all()
@@ -178,6 +189,11 @@ class Point(db.Model): # Examples: [Merge Sort, Has a running time of O(n log n)
             "last_answered": str(self.last_answered),
             "order": str(self.order)
         }
+    
+    def isTitle(self):
+        if self.blankFill and ">|<" not in self.text:
+            return True
+        return False
 
     
 def formatString(text, punc=False):
